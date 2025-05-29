@@ -21,10 +21,16 @@ class MainActivity : ComponentActivity() {
                 WindowInfoTracker.getOrCreate(this@MainActivity)
                     .windowLayoutInfo(this@MainActivity)
                     .collect { layoutInfo ->
-                        if (isTabletopMode(layoutInfo)) {
-                            setContentView(R.layout.tabletop_layout)
-                        } else {
-                            setContentView(R.layout.activity_main)
+                        when {
+                            isBookMode(layoutInfo) -> {
+                                setContentView(R.layout.book_layout)
+                            }
+                            isTabletopMode(layoutInfo) -> {
+                                setContentView(R.layout.tabletop_layout)
+                            }
+                            else -> {
+                                setContentView(R.layout.activity_main)
+                            }
                         }
                     }
             }
@@ -36,6 +42,14 @@ class MainActivity : ComponentActivity() {
             feature is FoldingFeature &&
                     feature.state == FoldingFeature.State.HALF_OPENED &&
                     feature.orientation == FoldingFeature.Orientation.HORIZONTAL
+        }
+    }
+
+    private fun isBookMode(layoutInfo: WindowLayoutInfo): Boolean {
+        return layoutInfo.displayFeatures.any { feature ->
+            feature is FoldingFeature &&
+                    feature.state == FoldingFeature.State.HALF_OPENED &&
+                    feature.orientation == FoldingFeature.Orientation.VERTICAL
         }
     }
 }
