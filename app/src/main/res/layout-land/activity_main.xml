@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:text="Benvenuto in portrait!"
+        android:text="Benvenuto in LANDSCAPE!"
         android:textSize="24sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
