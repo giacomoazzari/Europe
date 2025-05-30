@@ -2,6 +2,7 @@ package esp.project.europe
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
@@ -10,10 +11,11 @@ import androidx.window.layout.WindowInfoTracker
 import kotlinx.coroutines.launch
 import androidx.window.layout.WindowLayoutInfo
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         // Avvia l'ascolto della postura dello schermo
         lifecycleScope.launch {

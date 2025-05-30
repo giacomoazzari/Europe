@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
-    tools:context=".WelcomeFragment">
+    android:gravity="center_horizontal">
 
     <TextView
         android:layout_width="match_parent"
