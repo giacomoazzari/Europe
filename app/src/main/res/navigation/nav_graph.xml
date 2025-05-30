@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="esp.project.europe.WelcomeFragment"
+        android:label="Welcome"
+        tools:layout="@layout/fragment_welcome"/>
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="esp.project.europe.ListFragment"
+        android:label="Lista"
+        tools:layout="@layout/fragment_list"/>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="esp.project.europe.MapFragment"
+        android:label="Mappa"
+        tools:layout="@layout/fragment_map"/>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="esp.project.europe.DetailFragment"
+        android:label="Dettaglio"
+        tools:layout="@layout/fragment_detail"/>
+</navigation>
