@@ -53,6 +53,7 @@ class ListFragment : Fragment() {
             Country("Iceland", R.drawable.iceland),
             Country("Ireland", R.drawable.ireland),
             Country("Italy", R.drawable.italy),
+            Country("Ladinia", R.drawable.ladinia),
             Country("Kosovo", R.drawable.kosovo),
             Country("Latvia", R.drawable.latvia),
             Country("Liechtenstein", R.drawable.liechtenstein),
@@ -78,6 +79,7 @@ class ListFragment : Fragment() {
             Country("Ukraine", R.drawable.ukraine),
             Country("United Kingdom", R.drawable.united_kingdom),
             Country("Vatican City", R.drawable.vatican_city),
+            Country("Veneto", R.drawable.veneto),
             Country("Wales", R.drawable.wales)
         )
 
