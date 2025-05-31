@@ -9,7 +9,11 @@
         android:id="@+id/welcomeFragment"
         android:name="esp.project.europe.WelcomeFragment"
         android:label="Welcome"
-        tools:layout="@layout/fragment_welcome"/>
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/listFragment"

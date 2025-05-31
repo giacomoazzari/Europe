@@ -5,20 +5,85 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ListFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
 
-        // Retrieves data from datasource
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CountryAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
-
-        // Retrieves the recycler view
-
-
-        return view
+        return inflater.inflate(R.layout.fragment_list, container, false)
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Initialize the RecyclerView
+        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Retrieves data from Country class
+        val countryList = listOf(
+            Country("Albania", R.drawable.albania),
+            Country("Andorra", R.drawable.andorra),
+            Country("Austria", R.drawable.austria),
+            Country("Belarus", R.drawable.belarus),
+            Country("Belgium", R.drawable.belgium),
+            Country("Bosnia and Herzegovina", R.drawable.bosnia_and_herzegovina),
+            Country("Bulgaria", R.drawable.bulgaria),
+            Country("Croatia", R.drawable.croatia),
+            Country("Czech Republic", R.drawable.czech_republic),
+            Country("Denmark", R.drawable.denmark),
+            Country("Estonia", R.drawable.estonia),
+            Country("Finland", R.drawable.finland),
+            Country("France", R.drawable.france),
+            Country("Georgia", R.drawable.georgia),
+            Country("Germany", R.drawable.germany),
+            Country("Greece", R.drawable.greece),
+            Country("Hungary", R.drawable.hungary),
+            Country("Iceland", R.drawable.iceland),
+            Country("Ireland", R.drawable.ireland),
+            Country("Italy", R.drawable.italy),
+            Country("Kosovo", R.drawable.kosovo),
+            Country("Latvia", R.drawable.latvia),
+            Country("Liechtenstein", R.drawable.liechtenstein),
+            Country("Lithuania", R.drawable.lithuania),
+            Country("Luxembourg", R.drawable.luxembourg),
+            Country("Malta", R.drawable.malta),
+            Country("Moldova", R.drawable.moldova),
+            Country("Monaco", R.drawable.monaco),
+            Country("Montenegro", R.drawable.montenegro),
+            Country("Netherlands", R.drawable.netherlands),
+            Country("North Macedonia", R.drawable.north_macedonia),
+            Country("Norway", R.drawable.norway),
+            Country("Poland", R.drawable.poland),
+            Country("Portugal", R.drawable.portugal),
+            Country("Romania", R.drawable.romania),
+            Country("Serbia", R.drawable.serbia),
+            Country("Slovakia", R.drawable.slovakia),
+            Country("Slovenia", R.drawable.slovenia),
+            Country("Spain", R.drawable.spain),
+            Country("Sweden", R.drawable.sweden),
+            Country("Switzerland", R.drawable.switzerland),
+            Country("Ukraine", R.drawable.ukraine),
+            Country("United Kingdom", R.drawable.united_kingdom),
+            Country("Wales", R.drawable.wales),
+            Country("Scotland", R.drawable.scotland),
+            Country("Greenland", R.drawable.greenland),
+            Country("Vatican City", R.drawable.vatican_city),
+            Country("Europe", R.drawable.europe),
+            Country("England", R.drawable.england)
+        )
+
+        //Set the adapter
+        adapter = CountryAdapter(countryList)
+        recyclerView.adapter = adapter
+    }
+
 }
