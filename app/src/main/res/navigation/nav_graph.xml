@@ -45,5 +45,8 @@
         <argument
             android:name="capital"
             app:argType="string" />
+        <argument
+            android:name="population"
+            app:argType="integer" />
     </fragment>
 </navigation>

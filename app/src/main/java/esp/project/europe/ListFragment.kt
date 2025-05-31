@@ -35,7 +35,8 @@ class ListFragment : Fragment() {
             val action = ListFragmentDirections.actionListFragmentToDetailFragment(
                 countryName = selectedCountry.name,
                 flagResId = selectedCountry.flag,
-                capital = selectedCountry.capital ?: "N/A"
+                capital = selectedCountry.capital ?: "N/A",
+                population = selectedCountry.population
             )
             findNavController().navigate(action)
         }
