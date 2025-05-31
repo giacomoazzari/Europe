@@ -48,5 +48,14 @@
         <argument
             android:name="population"
             app:argType="integer" />
+        <argument
+            android:name="area"
+            app:argType="integer" />
+        <argument
+            android:name="callingCode"
+            app:argType="string" />
+        <argument
+            android:name="currency"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -36,7 +36,10 @@ class ListFragment : Fragment() {
                 countryName = selectedCountry.name,
                 flagResId = selectedCountry.flag,
                 capital = selectedCountry.capital ?: "N/A",
-                population = selectedCountry.population
+                population = selectedCountry.population,
+                area = selectedCountry.area,
+                callingCode = selectedCountry.callingCode,
+                currency = selectedCountry.currency
             )
             findNavController().navigate(action)
         }

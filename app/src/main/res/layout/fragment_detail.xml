@@ -42,4 +42,31 @@
         android:layout_marginTop="8dp"
         android:gravity="center" />
 
+    <TextView
+        android:id="@+id/areaTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Area: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/callingCodeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calling Code: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/currencyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Currency: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
 </LinearLayout>

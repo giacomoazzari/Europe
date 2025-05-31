@@ -22,7 +22,10 @@ class DetailFragment : Fragment() {
         view.findViewById<TextView>(R.id.countryNameTextView).text = args.countryName
         view.findViewById<TextView>(R.id.capitalTextView).text = "Capital: ${args.capital}"
         view.findViewById<ImageView>(R.id.flagImageView).setImageResource(args.flagResId)
-
         view.findViewById<TextView>(R.id.populationTextView).text = "Population: ${args.population}"
+        view.findViewById<TextView>(R.id.areaTextView).text = "Area: ${args.area}"
+        view.findViewById<TextView>(R.id.callingCodeTextView).text = "Calling Code: ${args.callingCode}"
+        view.findViewById<TextView>(R.id.currencyTextView).text = "Currency: ${args.currency}"
+
     }
 }
