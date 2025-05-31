@@ -1,3 +1,11 @@
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.9.0")
+    }
+}
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)

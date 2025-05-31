@@ -19,7 +19,11 @@
         android:id="@+id/listFragment"
         android:name="esp.project.europe.ListFragment"
         android:label="Lista"
-        tools:layout="@layout/fragment_list"/>
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/mapFragment"

@@ -13,26 +13,28 @@ import androidx.window.layout.WindowLayoutInfo
 
 class MainActivity : AppCompatActivity() {
 
+    private var currentLayout: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_main)
+        currentLayout = R.layout.activity_main
 
-        // Avvia l'ascolto della postura dello schermo
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 WindowInfoTracker.getOrCreate(this@MainActivity)
                     .windowLayoutInfo(this@MainActivity)
                     .collect { layoutInfo ->
-                        when {
-                            isBookMode(layoutInfo) -> {
-                                setContentView(R.layout.book_layout)
-                            }
-                            isTabletopMode(layoutInfo) -> {
-                                setContentView(R.layout.tabletop_layout)
-                            }
-                            else -> {
-                                setContentView(R.layout.activity_main)
-                            }
+                        val newLayout = when {
+                            isBookMode(layoutInfo) -> R.layout.book_layout
+                            isTabletopMode(layoutInfo) -> R.layout.tabletop_layout
+                            else -> R.layout.activity_main
+                        }
+
+                        if (newLayout != currentLayout) {
+                            setContentView(newLayout)
+                            currentLayout = newLayout
                         }
                     }
             }
