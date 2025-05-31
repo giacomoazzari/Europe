@@ -3,6 +3,6 @@
     <style name="Base.Theme.Europe" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
     </style>
- 
+
     <style name="Theme.Europe" parent="Base.Theme.Europe" />
 </resources>
