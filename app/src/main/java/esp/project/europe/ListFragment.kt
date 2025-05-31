@@ -32,15 +32,13 @@ class ListFragment : Fragment() {
 
         //Set the adapter
         adapter = CountryAdapter(countryList) { selectedCountry ->
-            val bundle = Bundle().apply {
-                putString("countryName", selectedCountry.name)
-                putInt("flagResId", selectedCountry.flag)
-                putString("capital", selectedCountry.capital ?: "N/A")
-            }
-
-            findNavController().navigate(R.id.action_listFragment_to_detailFragment, bundle)
+            val action = ListFragmentDirections.actionListFragmentToDetailFragment(
+                countryName = selectedCountry.name,
+                flagResId = selectedCountry.flag,
+                capital = selectedCountry.capital ?: "N/A"
+            )
+            findNavController().navigate(action)
         }
-
         recyclerView.adapter = adapter
     }
 }

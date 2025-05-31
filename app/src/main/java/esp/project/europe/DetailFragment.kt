@@ -17,12 +17,10 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val name = arguments?.getString("countryName") ?: "Unknown"
-        val flagResId = arguments?.getInt("flagResId") ?: R.drawable.europe
-        val capital = arguments?.getString("capital") ?: "N/A"
+        val args = DetailFragmentArgs.fromBundle(requireArguments())
 
-        view.findViewById<TextView>(R.id.countryNameTextView).text = name
-        view.findViewById<TextView>(R.id.capitalTextView).text = "Capital: $capital"
-        view.findViewById<ImageView>(R.id.flagImageView).setImageResource(flagResId)
+        view.findViewById<TextView>(R.id.countryNameTextView).text = args.countryName
+        view.findViewById<TextView>(R.id.capitalTextView).text = "Capital: ${args.capital}"
+        view.findViewById<ImageView>(R.id.flagImageView).setImageResource(args.flagResId)
     }
 }

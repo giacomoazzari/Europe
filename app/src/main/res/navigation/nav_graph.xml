@@ -35,5 +35,15 @@
         android:id="@+id/detailFragment"
         android:name="esp.project.europe.DetailFragment"
         android:label="Dettaglio"
-        tools:layout="@layout/fragment_detail"/>
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="countryName"
+            app:argType="string" />
+        <argument
+            android:name="flagResId"
+            app:argType="integer" />
+        <argument
+            android:name="capital"
+            app:argType="string" />
+    </fragment>
 </navigation>
