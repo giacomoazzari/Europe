@@ -40,12 +40,15 @@ class ListFragment : Fragment() {
             Country("Croatia", R.drawable.croatia),
             Country("Czech Republic", R.drawable.czech_republic),
             Country("Denmark", R.drawable.denmark),
+            Country("England", R.drawable.england),
             Country("Estonia", R.drawable.estonia),
+            Country("Europe", R.drawable.europe),
             Country("Finland", R.drawable.finland),
             Country("France", R.drawable.france),
             Country("Georgia", R.drawable.georgia),
             Country("Germany", R.drawable.germany),
             Country("Greece", R.drawable.greece),
+            Country("Greenland", R.drawable.greenland),
             Country("Hungary", R.drawable.hungary),
             Country("Iceland", R.drawable.iceland),
             Country("Ireland", R.drawable.ireland),
@@ -65,6 +68,7 @@ class ListFragment : Fragment() {
             Country("Poland", R.drawable.poland),
             Country("Portugal", R.drawable.portugal),
             Country("Romania", R.drawable.romania),
+            Country("Scotland", R.drawable.scotland),
             Country("Serbia", R.drawable.serbia),
             Country("Slovakia", R.drawable.slovakia),
             Country("Slovenia", R.drawable.slovenia),
@@ -73,12 +77,8 @@ class ListFragment : Fragment() {
             Country("Switzerland", R.drawable.switzerland),
             Country("Ukraine", R.drawable.ukraine),
             Country("United Kingdom", R.drawable.united_kingdom),
-            Country("Wales", R.drawable.wales),
-            Country("Scotland", R.drawable.scotland),
-            Country("Greenland", R.drawable.greenland),
             Country("Vatican City", R.drawable.vatican_city),
-            Country("Europe", R.drawable.europe),
-            Country("England", R.drawable.england)
+            Country("Wales", R.drawable.wales)
         )
 
         //Set the adapter
