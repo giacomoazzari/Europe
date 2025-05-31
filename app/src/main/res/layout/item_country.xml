@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:text="Nome Paese"
         android:textSize="20sp"
+        android:fontFamily="sans-serif-smallcaps"
         android:textColor="#000000" />
 </LinearLayout>

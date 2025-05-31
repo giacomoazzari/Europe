@@ -1,25 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center"
+    android:background="@color/white"
+    >
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp"
-        android:text="Welcome fragment" />
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/welcome_text"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-smallcaps"
+        android:textSize="40sp" />
 
-    <Button
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:padding="10dp"
+        android:text="@string/app_description"
+        android:textColor="@color/black"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="16sp" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="start" />
+        android:layout_marginBottom="40pt"
+        android:text="@string/start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColorLink="@color/white"
+        android:fontFamily="sans-serif-smallcaps"
+        android:layout_margin="10sp"
+        app:backgroundTint="#3F51B5" />
 </LinearLayout>
