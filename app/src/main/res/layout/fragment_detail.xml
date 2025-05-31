@@ -1,13 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/flagImageView"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="country flag"
+        android:scaleType="fitCenter" />
 
     <TextView
-        android:id="@+id/detail_placeholder"
-        android:layout_width="wrap_content"
+        android:id="@+id/countryNameTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Qui ci saranno le informazioni dettagliate sul paese"
-        android:textSize="16sp" />
+        android:text="Country Name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/capitalTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capital: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/populationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Population: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
 </LinearLayout>
