@@ -10,6 +10,7 @@ import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import kotlinx.coroutines.launch
 import androidx.window.layout.WindowLayoutInfo
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +42,31 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
             }
+        }
+
+        val menu = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
+        menu.setOnItemSelectedListener{ item ->
+            when (item.getItemId()) {
+                 R.id.home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, WelcomeFragment())
+                        .commit()
+                }
+
+                R.id.list -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, ListFragment())
+                        .commit()
+                }
+
+                R.id.map -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView, MapFragment())
+                        .commit()
+                }
+            }
+
+            return@setOnItemSelectedListener true
         }
     }
 
