@@ -14,12 +14,14 @@ import androidx.window.layout.WindowLayoutInfo
 class MainActivity : AppCompatActivity() {
 
     private var currentLayout: Int = 0
+    private var isInitialSetupDone = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
         currentLayout = R.layout.activity_main
+        setupNavigationIfNeeded()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -35,9 +37,20 @@ class MainActivity : AppCompatActivity() {
                         if (newLayout != currentLayout) {
                             setContentView(newLayout)
                             currentLayout = newLayout
+                            setupNavigationIfNeeded() // << IMPORTANTE: ricarica il fragment
                         }
                     }
             }
+        }
+    }
+
+    private fun setupNavigationIfNeeded() {
+        // Solo se non esiste già un fragment nel container
+        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+        if (fragmentContainer == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, WelcomeFragment())
+                .commit()
         }
     }
 
