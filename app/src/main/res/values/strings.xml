@@ -6,4 +6,6 @@
     <string name="app_description">Scopri tutti i paesi del nostro continente: impara le bandiere ,
         ascolta gli inni e usa la mappa interattiva per viaggiare con un semplice tocco.</string>
     <string name="start">Inizia l\'esplorazione!</string>
+    <string name="channel_name">Hymn Player Service</string>
+    <string name="channel_description">Service for playing hymns</string>"
 </resources>
