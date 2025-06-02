@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/map_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Qui ci sarà la mappa dell’Europa"
-        android:layout_gravity="center" />
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="100dp"/>
+
 </FrameLayout>
