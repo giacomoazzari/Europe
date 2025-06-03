@@ -13,6 +13,7 @@ import android.os.IBinder
 import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 
 class HymnService : Service() {
 
@@ -26,13 +27,14 @@ class HymnService : Service() {
 
     //Use of on Start command
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d("DEBUG", "onStartCommand")
+
+        //Two cases: start or stop the hymn
         if (intent.getBooleanExtra(ACTION_PLAY, false)) {
-            Log.d("DEBUG", "Into if for start")
+
             playHymn(intent)
         }
         else if (intent.getBooleanExtra(ACTION_STOP, false)) {
-            Log.d("DEBUG", "Into if for stop")
+
             stopHymn()
         }
         return START_STICKY
@@ -42,23 +44,8 @@ class HymnService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        //Check for the version
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            //Create the notification channel
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Hymn reproduction",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-
-            //Create the notification manager
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            )
-            notificationManager.createNotificationChannel(channel)
-
-        }
+        //Create the channel
+        createNotificationChannel()
     }
 
     //Use of on destroy
@@ -83,7 +70,6 @@ class HymnService : Service() {
         //Get the song name, make it into ad Identifier for the create method
         val songName = intent.getStringExtra(NATIONS_HYMN)
         val songId = resources.getIdentifier(songName, "raw", packageName)
-        Log.d("DEBUG", "Got to song name: $songId")
 
         //Add the song
         myPlayer = MediaPlayer.create(this, songId)
@@ -107,17 +93,41 @@ class HymnService : Service() {
         }
     }
 
+    //Create a private fun for the notification channel
+    private fun createNotificationChannel() {
+
+        //Check API level
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            //Get the parameters
+            val id = CHANNEL_ID
+            val name = "Hymn reproduction"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            //Create the channel
+            val channel = NotificationChannel(id, name, importance)
+
+            //Create the notification manager
+            val notificationManager = getSystemService(
+                Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
+        }
+    }
+
     //Create a private fun for the notification
     private fun createNotification(): Notification {
 
-        //Add name of the country in the notification
-        val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-        notificationBuilder.setContentTitle("Inno Title")
-        notificationBuilder.setContentText("Description")
-        notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        notificationBuilder.setSmallIcon(android.R.drawable.ic_media_play)
+        //TODO: add pending intent for going back
 
-        return notificationBuilder.build()
+        //Add name of the country in the notification
+        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setContentTitle("Title")
+            .setContentText("Text")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        return builder.build()
     }
 
     //Object containing the etiquette
