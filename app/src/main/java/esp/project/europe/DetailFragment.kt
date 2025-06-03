@@ -1,6 +1,7 @@
 package esp.project.europe
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,8 +45,8 @@ class DetailFragment : Fragment() {
                 Log.d("DEBUG", "Play button clicked")
                 val i = Intent(context, HymnService::class.java)
                 i.putExtra(HymnService.ACTION_PLAY, true)
-                i.putExtra(HymnService.NATIONS_HYMN, "it")
-                //TODO: make song decision dynamical
+                //countryName needs to be lowercase and spaces replaced with underscores to correspond with the raw files
+                i.putExtra(HymnService.NATIONS_HYMN, args.countryName.lowercase().replace( " ", "_"))
                 ContextCompat.startForegroundService(context, i)
                 isPlaying = true
                 playButton.text = "Stop Hymn"
