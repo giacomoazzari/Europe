@@ -9,6 +9,7 @@
     <!--Permission for the bg player -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!--Permission for notifications-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />

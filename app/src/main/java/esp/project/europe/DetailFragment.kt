@@ -44,7 +44,7 @@ class DetailFragment : Fragment() {
                 Log.d("DEBUG", "Play button clicked")
                 val i = Intent(context, HymnService::class.java)
                 i.putExtra(HymnService.ACTION_PLAY, true)
-                i.putExtra(HymnService.NATIONS_HYMN, R.raw.it)
+                i.putExtra(HymnService.NATIONS_HYMN, "it")
                 //TODO: make song decision dynamical
                 ContextCompat.startForegroundService(context, i)
                 isPlaying = true
