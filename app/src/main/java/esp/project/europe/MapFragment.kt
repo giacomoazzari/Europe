@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -19,6 +20,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 class MapFragment : Fragment(), OnCountrySelectedListener {
 
     private lateinit var map: MapView
+    private lateinit var nav: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,6 +114,11 @@ class MapFragment : Fragment(), OnCountrySelectedListener {
         return mapview
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        nav = findNavController()
+    }
+
     override fun onCountrySelected(country: Country) {
 
         val action = MapFragmentDirections.actionMapFragmentToDetailFragment(
@@ -123,8 +130,8 @@ class MapFragment : Fragment(), OnCountrySelectedListener {
             callingCode = country.callingCode,
             currency = country.currency
         )
-    Log.d("DEBUG", "Navigation to detail fragment $action")
-        findNavController().navigate(action)
+
+        nav.navigate(action)
 
     }
 

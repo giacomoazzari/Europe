@@ -3,11 +3,11 @@
 
     <item android:title="Home"
         android:icon="@drawable/baseline_home_24"
-        android:id="@+id/home"/>
+        android:id="@+id/welcomeFragment"/>
     <item android:title="Lista"
         android:icon="@drawable/baseline_format_list_bulleted_24"
-        android:id="@+id/list"/>
+        android:id="@+id/listFragment"/>
     <item android:title="Mappa"
         android:icon="@drawable/baseline_map_24"
-        android:id="@+id/map"/>
+        android:id="@+id/mapFragment"/>
 </menu>
