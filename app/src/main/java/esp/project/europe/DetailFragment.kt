@@ -41,21 +41,43 @@ class DetailFragment : Fragment() {
         val playButton = view.findViewById<Button>(R.id.playHymnButton)
         playButton.setOnClickListener {
 
+            //Case 1: it's silent
             if(!isPlaying) {
-                Log.d("DEBUG", "Play button clicked")
+
+                //Create the intent
                 val i = Intent(context, HymnService::class.java)
+
+                //Add the info of starting
                 i.putExtra(HymnService.ACTION_PLAY, true)
-                //countryName needs to be lowercase and spaces replaced with underscores to correspond with the raw files
-                i.putExtra(HymnService.NATIONS_HYMN, args.countryName.lowercase().replace( " ", "_"))
+
+                //Add the name of the country in order to find the song.
+                //countryName needs to be lowercase and spaces replaced
+                // with underscores to correspond with the raw files
+                i.putExtra(HymnService.NATIONS_HYMN, args.countryName
+                    .lowercase().replace( " ", "_"))
+
+                //Start the foreground intent
                 ContextCompat.startForegroundService(context, i)
+
+                //Set the button text and state
                 isPlaying = true
                 playButton.text = "Stop Hymn"
             }
 
+            //Case 2: it's playing
             else {
+
+                //Create the intent
                 val i = Intent(context, HymnService::class.java)
+
+                //Add the info of stopping
                 i.putExtra(HymnService.ACTION_STOP, true)
+
+                //Start the foreground service, but the logic beyond will understand
+                //it has to be stopped
                 ContextCompat.startForegroundService(context, i)
+
+                //Set the button text and state
                 isPlaying = false
                 playButton.text = "Play Hymn"
             }

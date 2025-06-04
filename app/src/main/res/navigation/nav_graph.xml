@@ -29,7 +29,11 @@
         android:id="@+id/mapFragment"
         android:name="esp.project.europe.MapFragment"
         android:label="Mappa"
-        tools:layout="@layout/fragment_map"/>
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_detailFragment"
+            app:destination="@id/detailFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
