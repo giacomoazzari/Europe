@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
         }
 
+        // Check the state of the device and set the appropriate layout
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 WindowInfoTracker.getOrCreate(this@MainActivity)
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "notification permission granted: $p")
     }
 
+    // Support method to check if the device is in tabletop state
     private fun isTabletopMode(layoutInfo: WindowLayoutInfo): Boolean {
         return layoutInfo.displayFeatures.any { feature ->
             feature is FoldingFeature &&
@@ -86,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Support method to check if the device is in book state
     private fun isBookMode(layoutInfo: WindowLayoutInfo): Boolean {
         return layoutInfo.displayFeatures.any { feature ->
             feature is FoldingFeature &&
@@ -101,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNav, navHost)
         Log.d("DEBUG","Navigation set up")
     }
+
 
     companion object
     {
