@@ -38,7 +38,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="esp.project.europe.DetailFragment"
-        android:label="Dettaglio"
+        android:label=""
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="countryName"

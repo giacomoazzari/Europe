@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         //Start the initial layout
         setContentView(R.layout.activity_main)
         currentLayout = R.layout.activity_main
-        Log.d("DEBUG","Set content view to $currentLayout")
+
 
         //Setup of the navigation, after waiting for the view to be ready
         findViewById<View>(R.id.fragmentContainerView).post {
@@ -55,15 +55,16 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         if (newLayout != currentLayout) {
+
                             //Set the new layout and update the variable
                             setContentView(newLayout)
                             currentLayout = newLayout
-                            Log.d("DEBUG","In the cycle: set content view to $currentLayout")
+
 
                             //Wait for the fragment to be created, and then update navigation
                             val fragmentContainer = findViewById<View>(R.id.fragmentContainerView)
                             fragmentContainer.post {
-                                Log.d("DEBUG","In the post, container ready, setting un navigation")
+
                                 setUpNavigation()
                             }
                         }
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     //For notifications permission
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
 
@@ -97,12 +99,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //Support method to set up the navigation, including logic for the bottom menù
     private fun setUpNavigation() {
         val navHost = findNavController(R.id.fragmentContainerView)
-        Log.d("DEBUG","Found navigator with id $navHost")
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
+
         NavigationUI.setupWithNavController(bottomNav, navHost)
-        Log.d("DEBUG","Navigation set up")
+
+        //Add a listener in order to hide the bottom menù when the user
+        //is in the home or detail fragment
+        navHost.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.welcomeFragment -> bottomNav.visibility = View.GONE
+                R.id.detailFragment -> bottomNav.visibility = View.GONE
+                else -> bottomNav.visibility = View.VISIBLE
+            }
+        }
     }
 
 

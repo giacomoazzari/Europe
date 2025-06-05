@@ -8,4 +8,7 @@
     <string name="start">Inizia l\'esplorazione!</string>
     <string name="hymn">\'s hymn</string>
     <string name="go_to">See more</string>
+    <string name="play">Play Hymn</string>
+    <string name="stop">Stop Hymn</string>
+
 </resources>
