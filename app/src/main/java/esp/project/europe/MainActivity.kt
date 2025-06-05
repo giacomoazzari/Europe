@@ -11,6 +11,7 @@ import androidx.core.content.PermissionChecker
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.window.layout.FoldingFeature
@@ -19,22 +20,15 @@ import kotlinx.coroutines.launch
 import androidx.window.layout.WindowLayoutInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
+    private lateinit var nav: NavController
     private var currentLayout : Int = 0
+    var isDualPane: Boolean = false
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //Start the initial layout
-        setContentView(R.layout.activity_main)
-        currentLayout = R.layout.activity_main
-
-
-        //Setup of the navigation, after waiting for the view to be ready
-        findViewById<View>(R.id.fragmentContainerView).post {
-            setUpNavigation()
-        }
 
         //Check the permissions
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -54,18 +48,37 @@ class MainActivity : AppCompatActivity() {
                             else -> R.layout.activity_main
                         }
 
+                        //Set the layout if the device has changed position
                         if (newLayout != currentLayout) {
-
-                            //Set the new layout and update the variable
                             setContentView(newLayout)
                             currentLayout = newLayout
 
+                            isDualPane = findViewById<View?>(R.id.detailFragmentContainer) != null
 
-                            //Wait for the fragment to be created, and then update navigation
-                            val fragmentContainer = findViewById<View>(R.id.fragmentContainerView)
-                            fragmentContainer.post {
-
+                            if(!isDualPane && newLayout == R.layout.activity_main) {
+                                nav = findNavController(R.id.fragmentContainerView)
                                 setUpNavigation()
+                            }
+                        }
+
+                        //Upload the correct fragment looking at the layout
+                        when (newLayout) {
+                            R.layout.activity_main -> {
+                                //Already done
+                            }
+                            R.layout.tabletop_layout -> {
+                                supportFragmentManager.beginTransaction()
+                                    .replace(R.id.listFragmentContainer, MapFragment())
+                                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                                    .commit()
+                                //findViewById<BottomNavigationView?>(R.id.bottomNavigationMenu)?.visibility = View.GONE
+                            }
+                            R.layout.book_layout -> {
+                                supportFragmentManager.beginTransaction()
+                                    .replace(R.id.listFragmentContainer, ListFragment())
+                                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                                    .commit()
+                                //findViewById<BottomNavigationView?>(R.id.bottomNavigationMenu)?.visibility = View.GONE
                             }
                         }
                     }
@@ -99,8 +112,44 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCountrySelected(country: Country?) {
+        if(country == null) {
+            Log.w("MainActivity", "Country selected is null")
+            return
+        }
+
+        val action = MapFragmentDirections.actionMapFragmentToDetailFragment(
+            countryName = country.name,
+            flagResId = country.flag,
+            capital = country.capital,
+            population = country.population,
+            area = country.area,
+            callingCode = country.callingCode,
+            currency = country.currency
+        )
+
+        if(isDualPane) {
+            val detailFragment = DetailFragment.newInstance(
+                country.name,
+                country.flag,
+                country.capital,
+                country.population,
+                country.area,
+                country.callingCode,
+                country.currency
+            )
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.detailFragmentContainer, detailFragment)
+                .commit()
+        }
+        else {
+            nav.navigate(action)
+        }
+    }
     //Support method to set up the navigation, including logic for the bottom menù
     private fun setUpNavigation() {
+        if(currentLayout != R.layout.activity_main) return
+
         val navHost = findNavController(R.id.fragmentContainerView)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
 
@@ -116,7 +165,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     companion object
     {

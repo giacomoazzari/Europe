@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CountryAdapter(
     private val countryList: List<Country>,
-    private val onItemClick: (Country) -> Unit
+    private val listener: OnCountrySelectedListener
     ) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 
         // TAG for logging
@@ -24,7 +24,7 @@ class CountryAdapter(
             flagImageView.setImageResource(country.flag)
             countryNameTextView.text = country.name
             itemView.setOnClickListener {
-                onItemClick(country)
+                listener.onCountrySelected(country)
             }
         }
     }

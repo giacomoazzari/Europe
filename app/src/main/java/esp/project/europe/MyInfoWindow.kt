@@ -33,8 +33,7 @@ class MyInfoWindow (
             //Find the country by name
             val nation = CountriesData.getCountryByName(countryName)
 
-            //Notify the listener if the nation was found
-            nation?.let { listener.onCountrySelected(it) }
+            listener.onCountrySelected(nation)
         }
     }
 

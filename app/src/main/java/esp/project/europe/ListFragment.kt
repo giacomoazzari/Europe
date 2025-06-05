@@ -1,5 +1,6 @@
 package esp.project.europe
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,12 @@ class ListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CountryAdapter
+    private var listener: OnCountrySelectedListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as? OnCountrySelectedListener
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,18 +38,7 @@ class ListFragment : Fragment() {
         val countryList = getCountries()
 
         //Set the adapter
-        adapter = CountryAdapter(countryList) { selectedCountry ->
-            val action = ListFragmentDirections.actionListFragmentToDetailFragment(
-                countryName = selectedCountry.name,
-                flagResId = selectedCountry.flag,
-                capital = selectedCountry.capital,
-                population = selectedCountry.population,
-                area = selectedCountry.area,
-                callingCode = selectedCountry.callingCode,
-                currency = selectedCountry.currency
-            )
-            findNavController().navigate(action)
-        }
+        adapter = CountryAdapter(countryList, listener!!)
         recyclerView.adapter = adapter
     }
 }

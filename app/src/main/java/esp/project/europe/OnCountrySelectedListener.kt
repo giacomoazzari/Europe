@@ -1,5 +1,5 @@
 package esp.project.europe
 
 interface OnCountrySelectedListener {
-    fun onCountrySelected(country: Country)
+    fun onCountrySelected(country: Country?)
 }

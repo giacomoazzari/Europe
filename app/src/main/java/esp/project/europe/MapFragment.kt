@@ -1,5 +1,6 @@
 package esp.project.europe
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,11 +18,15 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
-class MapFragment : Fragment(), OnCountrySelectedListener {
+class MapFragment : Fragment(){
 
     private lateinit var map: MapView
-    private lateinit var nav: NavController
+    private var listener: OnCountrySelectedListener? = null
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = context as? OnCountrySelectedListener
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,11 +66,8 @@ class MapFragment : Fragment(), OnCountrySelectedListener {
             marker.position = point.first
             marker.title = point.second
 
-            //Get the listener containing the nav controller
-            val listener = this
-
             //Get the info widget, with the listener for navigation
-            val info = MyInfoWindow(map, point.second, listener)
+            val info = MyInfoWindow(map, point.second, listener!!)
 
             //Put the info on the marker
             marker.infoWindow = info
@@ -112,27 +114,6 @@ class MapFragment : Fragment(), OnCountrySelectedListener {
         map.invalidate()
 
         return mapview
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        nav = findNavController()
-    }
-
-    override fun onCountrySelected(country: Country) {
-
-        val action = MapFragmentDirections.actionMapFragmentToDetailFragment(
-            countryName = country.name,
-            flagResId = country.flag,
-            capital = country.capital,
-            population = country.population,
-            area = country.area,
-            callingCode = country.callingCode,
-            currency = country.currency
-        )
-
-        nav.navigate(action)
-
     }
 
     override fun onPause() {
