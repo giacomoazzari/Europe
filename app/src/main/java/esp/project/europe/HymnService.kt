@@ -26,13 +26,16 @@ class HymnService : Service() {
 
     //Use of on Start command
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d("DEBUG", "onStartCommand")
+
+        //Two cases for the service: play or stop
         if (intent.getBooleanExtra(ACTION_PLAY, false)) {
-            Log.d("DEBUG", "Into if for start")
+
+            //First: Start
             playHymn(intent)
         }
         else if (intent.getBooleanExtra(ACTION_STOP, false)) {
-            Log.d("DEBUG", "Into if for stop")
+
+            //Second: Stop
             stopHymn()
         }
         return START_STICKY
@@ -51,6 +54,10 @@ class HymnService : Service() {
                 "Hymn reproduction",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+
+            //Dis activate the sound and vibration
+            channel.setSound(null, null)
+            channel.enableVibration(false)
 
             //Create the notification manager
             val notificationManager = getSystemService(
@@ -75,7 +82,7 @@ class HymnService : Service() {
 
         //Create notification, it has to be done early due to time limit of 5 seconds
         val notification = createNotification(intent.getStringExtra(NATIONS_HYMN) ?: "Unknown anthem")
-        val notificationID = 5786423 //unique ID for this notification
+        val notificationID = 5787423 //unique ID for this notification
         startForeground(notificationID, notification)
 
         //Set the flag to true

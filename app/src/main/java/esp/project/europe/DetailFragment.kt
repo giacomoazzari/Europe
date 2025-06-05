@@ -3,6 +3,7 @@ package esp.project.europe
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 
 class DetailFragment : Fragment() {
 
@@ -46,7 +45,7 @@ class DetailFragment : Fragment() {
         val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.detail_toolbar)
 
         //Color the backIcon black, as in a declarative way it doesn't work
-        val backIcon = ContextCompat.getDrawable(requireContext(), R.drawable.arrow)?.mutate()
+        val backIcon = ContextCompat.getDrawable(requireContext(), R.drawable.back_arrow)
         toolbar.navigationIcon = backIcon
 
         //Set the toolbar with only the row and not the title
@@ -64,7 +63,7 @@ class DetailFragment : Fragment() {
         val context = requireContext()
 
         //Set the listener for the button
-        playButton = view.findViewById<Button>(R.id.playHymnButton)
+        playButton = view.findViewById(R.id.playHymnButton)
         playButton.setOnClickListener {
 
             //Case 1: it's silent
@@ -125,7 +124,7 @@ class DetailFragment : Fragment() {
             i.putExtra(HymnService.ACTION_STOP, true)
 
             //Start the foreground service
-            ContextCompat.startForegroundService(context, i)
+            ContextCompat.startForegroundService(requireContext(), i)
 
             //Set the variable and button text
             isPlaying = false
