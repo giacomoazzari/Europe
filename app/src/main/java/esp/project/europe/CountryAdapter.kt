@@ -24,7 +24,7 @@ class CountryAdapter(
             flagImageView.setImageResource(country.flag)
             countryNameTextView.text = country.name
             itemView.setOnClickListener {
-                listener.onCountrySelected(country)
+                listener.onCountrySelected(country, ListaEnum.LIST)
             }
         }
     }

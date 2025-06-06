@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
@@ -112,21 +113,31 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         }
     }
 
-    override fun onCountrySelected(country: Country?) {
+    override fun onCountrySelected(country: Country?, provenienza: ListaEnum) {
         if(country == null) {
             Log.w("MainActivity", "Country selected is null")
             return
         }
 
-        val action = MapFragmentDirections.actionMapFragmentToDetailFragment(
-            countryName = country.name,
-            flagResId = country.flag,
-            capital = country.capital,
-            population = country.population,
-            area = country.area,
-            callingCode = country.callingCode,
-            currency = country.currency
-        )
+        val mapAction = MapFragmentDirections.actionMapFragmentToDetailFragment(
+                countryName = country.name,
+                flagResId = country.flag,
+                capital = country.capital,
+                population = country.population,
+                area = country.area,
+                callingCode = country.callingCode,
+                currency = country.currency
+            )
+
+        val listAction = ListFragmentDirections.actionListFragmentToDetailFragment(
+                countryName = country.name,
+                flagResId = country.flag,
+                capital = country.capital,
+                population = country.population,
+                area = country.area,
+                callingCode = country.callingCode,
+                currency = country.currency
+            )
 
         if(isDualPane) {
             val detailFragment = DetailFragment.newInstance(
@@ -142,9 +153,9 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                 .replace(R.id.detailFragmentContainer, detailFragment)
                 .commit()
         }
-        else {
-            nav.navigate(action)
-        }
+        else if(provenienza == ListaEnum.LIST) {
+            nav.navigate(listAction)
+        }else{  nav.navigate(mapAction)}
     }
     //Support method to set up the navigation, including logic for the bottom menù
     private fun setUpNavigation() {

@@ -33,7 +33,7 @@ class MyInfoWindow (
             //Find the country by name
             val nation = CountriesData.getCountryByName(countryName)
 
-            listener.onCountrySelected(nation)
+            listener.onCountrySelected(nation, ListaEnum.MAP)
         }
     }
 
