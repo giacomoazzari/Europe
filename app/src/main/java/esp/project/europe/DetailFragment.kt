@@ -67,7 +67,7 @@ class DetailFragment : Fragment() {
 
         //----------- code for the back button---------------------//
         //If it is in single pane mode, a back button is necessary
-        if(!isDual || !isTablet) {
+        if(!isDual && !isTablet) {
             //Find the toolbar, the activity and the navigator
             val navController = findNavController()
             val activity = requireActivity() as AppCompatActivity
