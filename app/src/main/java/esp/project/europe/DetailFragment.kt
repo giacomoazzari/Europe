@@ -30,6 +30,7 @@ class DetailFragment : Fragment() {
 
     //Variable for knowing the state
     private var isDual: Boolean = false
+    private var isTablet: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +61,13 @@ class DetailFragment : Fragment() {
 
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
+        isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
 
 
         //----------- code for the back button---------------------//
         //If it is in single pane mode, a back button is necessary
-        if(!isDual) {
+        if(!isDual || !isTablet) {
             //Find the toolbar, the activity and the navigator
             val navController = findNavController()
             val activity = requireActivity() as AppCompatActivity
