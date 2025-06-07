@@ -1,9 +1,9 @@
 package esp.project.europe
 
-enum class ListaEnum {
+enum class Origin {
     LIST, MAP
 }
 
 interface OnCountrySelectedListener {
-    fun onCountrySelected(country: Country?, provenienza: ListaEnum)
+    fun onCountrySelected(country: Country?, provenience: Origin)
 }

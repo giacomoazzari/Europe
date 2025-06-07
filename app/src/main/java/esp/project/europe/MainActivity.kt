@@ -8,7 +8,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
@@ -43,6 +42,8 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                 WindowInfoTracker.getOrCreate(this@MainActivity)
                     .windowLayoutInfo(this@MainActivity)
                     .collect { layoutInfo ->
+
+                        //Choose the new layout
                         val newLayout = when {
                             isBookMode(layoutInfo) -> R.layout.book_layout
                             isTabletopMode(layoutInfo) -> R.layout.tabletop_layout
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                             }
                             R.layout.tabletop_layout -> {
                                 supportFragmentManager.beginTransaction()
-                                    .replace(R.id.listFragmentContainer, MapFragment())
+                                    .replace(R.id.mapFragmentContainer, MapFragment())
                                     .replace(R.id.detailFragmentContainer, DetailFragment())
                                     .commit()
                                 //findViewById<BottomNavigationView?>(R.id.bottomNavigationMenu)?.visibility = View.GONE
@@ -113,12 +114,13 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         }
     }
 
-    override fun onCountrySelected(country: Country?, provenienza: ListaEnum) {
+    override fun onCountrySelected(country: Country?, provenience: Origin) {
         if(country == null) {
             Log.w("MainActivity", "Country selected is null")
             return
         }
 
+        //Prepare the action in case of Map
         val mapAction = MapFragmentDirections.actionMapFragmentToDetailFragment(
                 countryName = country.name,
                 flagResId = country.flag,
@@ -129,6 +131,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                 currency = country.currency
             )
 
+        //Prepare the action in case of List
         val listAction = ListFragmentDirections.actionListFragmentToDetailFragment(
                 countryName = country.name,
                 flagResId = country.flag,
@@ -139,6 +142,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                 currency = country.currency
             )
 
+        //If it's dual panel, upload the fragment
         if(isDualPane) {
             val detailFragment = DetailFragment.newInstance(
                 country.name,
@@ -153,9 +157,15 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                 .replace(R.id.detailFragmentContainer, detailFragment)
                 .commit()
         }
-        else if(provenienza == ListaEnum.LIST) {
+
+        //If it's single panel, check provenience and navigate
+        else if(provenience == Origin.LIST) {
             nav.navigate(listAction)
-        }else{  nav.navigate(mapAction)}
+        }
+        else
+        {
+            nav.navigate(mapAction)
+        }
     }
     //Support method to set up the navigation, including logic for the bottom menù
     private fun setUpNavigation() {

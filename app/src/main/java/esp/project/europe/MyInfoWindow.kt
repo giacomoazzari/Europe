@@ -1,7 +1,5 @@
 package esp.project.europe
 
-import android.content.Context
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import org.osmdroid.views.MapView
@@ -33,7 +31,7 @@ class MyInfoWindow (
             //Find the country by name
             val nation = CountriesData.getCountryByName(countryName)
 
-            listener.onCountrySelected(nation, ListaEnum.MAP)
+            listener.onCountrySelected(nation, Origin.MAP)
         }
     }
 

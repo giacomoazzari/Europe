@@ -7,6 +7,26 @@
     android:orientation="horizontal"
     android:padding="24dp">
 
+    <LinearLayout
+        android:id="@+id/welcome_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/welcomeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click a state!"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+    </LinearLayout>
+
     <!--Flag and button on the left-->
     <LinearLayout
         android:id="@+id/left_container"
@@ -15,8 +35,9 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationMenu"
-        app:layout_constraintEnd_toStartOf="@id/right_container">
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/right_container"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/flagImageView"
@@ -45,10 +66,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationMenu"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/left_container">
+        app:layout_constraintStart_toEndOf="@id/left_container"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/countryNameTextView"
@@ -106,15 +128,5 @@
             android:gravity="center"/>
 
     </LinearLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/left_container"
-        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,7 @@
 package esp.project.europe
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 
 class DetailFragment : Fragment() {
 
+    //Variables for the arguments
     private lateinit var countryName: String
     private var flagResId: Int = 0
     private lateinit var capital: String
@@ -25,9 +24,11 @@ class DetailFragment : Fragment() {
     private lateinit var callingCode: String
     private lateinit var currency: String
 
+    //Variables for the hymn player
     private var isPlaying = false
     private lateinit var playButton: Button
 
+    //Variable for knowing the state
     private var isDual: Boolean = false
 
     override fun onCreateView(
@@ -38,24 +39,31 @@ class DetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        //----------- code for the arguments---------------------//
+        //Check if there are args
+        if(arguments != null) {
+
+            //Get the arguments and show them
+            getTheArguments()
+            showCountryDetails()
+        }
+        else {
+
+            //Show the placeholder
+            showWelcomePlaceholder()
+        }
 
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
 
-        //Get the arguments
-        getTheArguments()
 
-        //Update the UI
-        view.findViewById<TextView>(R.id.countryNameTextView).text = countryName
-        view.findViewById<TextView>(R.id.capitalTextView).text = "Capital: $capital"
-        view.findViewById<ImageView>(R.id.flagImageView).setImageResource(flagResId)
-        view.findViewById<TextView>(R.id.populationTextView).text = "Population: $population"
-        view.findViewById<TextView>(R.id.areaTextView).text = "Area: $area"
-        view.findViewById<TextView>(R.id.callingCodeTextView).text = "Calling Code: $callingCode"
-        view.findViewById<TextView>(R.id.currencyTextView).text = "Currency: $currency"
 
+        //----------- code for the back button---------------------//
         //If it is in single pane mode, a back button is necessary
         if(!isDual) {
             //Find the toolbar, the activity and the navigator
@@ -63,11 +71,11 @@ class DetailFragment : Fragment() {
             val activity = requireActivity() as AppCompatActivity
             val toolbar = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.detail_toolbar)
 
-            //Color the backIcon black, as in a declarative way it doesn't work
+            //Put the icon in the toolbar
             val backIcon = ContextCompat.getDrawable(requireContext(), R.drawable.back_arrow)
             toolbar.navigationIcon = backIcon
 
-            //Set the toolbar with only the row and not the title
+            //Set the toolbar with only the arrow and not the title
             activity.setSupportActionBar(toolbar)
             activity.supportActionBar?.setDisplayShowTitleEnabled(false)
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -78,6 +86,10 @@ class DetailFragment : Fragment() {
 
             }
         }
+
+
+
+        //----------- code for the hymn player---------------------//
         //Require context
         val context = requireContext()
 
@@ -183,6 +195,60 @@ class DetailFragment : Fragment() {
         }
 
     }
+
+    //Private fun for showing the welcome placeholder
+    private fun showWelcomePlaceholder() {
+        //Check the orientation first
+        val orientation = resources.configuration.orientation
+
+        if(orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+
+            //In Landscape there are two containers to be shown
+            view?.findViewById<View>(R.id.welcome_placeholder)?.visibility = View.VISIBLE
+            view?.findViewById<View>(R.id.right_container)?.visibility = View.GONE
+            view?.findViewById<View>(R.id.left_container)?.visibility = View.GONE
+
+        } else {
+
+            //Only one in portrait
+            view?.findViewById<View>(R.id.welcome_placeholder)?.visibility = View.VISIBLE
+            view?.findViewById<View>(R.id.detail_container)?.visibility = View.GONE
+        }
+    }
+
+    //Private fun for showing the country details
+    private fun showCountryDetails() {
+
+        //Check the orientation first
+        val orientation = resources.configuration.orientation
+
+        if(orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+
+            //In Landscape there are two containers to be shown
+            view?.findViewById<View>(R.id.welcome_placeholder)?.visibility = View.GONE
+            view?.findViewById<View>(R.id.right_container)?.visibility = View.VISIBLE
+            view?.findViewById<View>(R.id.left_container)?.visibility = View.VISIBLE
+
+        } else {
+
+            //Only one in portrait
+            view?.findViewById<View>(R.id.welcome_placeholder)?.visibility = View.GONE
+            view?.findViewById<View>(R.id.detail_container)?.visibility = View.VISIBLE
+        }
+
+
+        //Update the UI
+        val rootView = requireView()
+
+        rootView.findViewById<TextView>(R.id.countryNameTextView).text = countryName
+        rootView.findViewById<TextView>(R.id.capitalTextView).text = "Capital: $capital"
+        rootView.findViewById<ImageView>(R.id.flagImageView).setImageResource(flagResId)
+        rootView.findViewById<TextView>(R.id.populationTextView).text = "Population: $population"
+        rootView.findViewById<TextView>(R.id.areaTextView).text = "Area: $area"
+        rootView.findViewById<TextView>(R.id.callingCodeTextView).text = "Calling Code: $callingCode"
+        rootView.findViewById<TextView>(R.id.currencyTextView).text = "Currency: $currency"
+    }
+
     //Contains all the arguments for the fragment
     companion object {
         const val ARG_COUNTRY_NAME = "countryName"
