@@ -172,7 +172,7 @@ class DetailFragment : Fragment() {
     private fun getTheArguments() {
 
         //Two cases, single or dual mode
-        if (isDual) {
+        if (isDual || isTablet) {
             //Case 1: get data from the bundle
             val args = requireArguments()
             countryName = args.getString(ARG_COUNTRY_NAME, "")
@@ -200,6 +200,7 @@ class DetailFragment : Fragment() {
 
     //Private fun for showing the welcome placeholder
     private fun showWelcomePlaceholder() {
+
         //Check the orientation first
         val orientation = resources.configuration.orientation
 

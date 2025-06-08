@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
             )
 
         //If it's dual panel, upload the fragment
-        if(isDualPane) {
+        if(isDualPane || isTablet) {
             val detailFragment = DetailFragment.newInstance(
                 country.name,
                 country.flag,
@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
         //Add the fragments, if they don't exist
         if(!detailFragment.isAdded) {
-            trans.add(R.id.fragment_container_2, detailFragment, "detailFragment")
+            trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
 
         }
         if(!listFragment.isAdded) {
