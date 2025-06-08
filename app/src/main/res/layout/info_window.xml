@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/widget_title"
-        android:text="Titolo temporaneo"
+        android:text="@string/temp_title"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_width="wrap_content"

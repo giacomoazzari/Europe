@@ -1,6 +1,5 @@
 package esp.project.europe
 
-
 import org.osmdroid.util.GeoPoint
 
 object Coordinates {

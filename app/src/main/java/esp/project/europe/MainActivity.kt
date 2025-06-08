@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
     private var activeFragment: Fragment? = null
     private lateinit var nav: NavController
     private var currentLayout : Int = 0
-    var isTablet: Boolean = false
+    private var isTablet: Boolean = false
         private set
     var isDualPane: Boolean = false
         private set

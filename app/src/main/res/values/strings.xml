@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Europe</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_text">Benvenuto in Europe!</string>
     <string name="app_description">Scopri tutti i paesi del nostro continente: impara le bandiere ,
         ascolta gli inni e usa la mappa interattiva per viaggiare con un semplice tocco.</string>
@@ -10,5 +8,6 @@
     <string name="go_to">See more</string>
     <string name="play">Play Hymn</string>
     <string name="stop">Stop Hymn</string>
+    <string name="temp_title">Titolo temporaneo</string>
 
 </resources>

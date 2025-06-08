@@ -18,10 +18,13 @@ class WelcomeFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_welcome, container, false)
+
+        // Set the listener for the start button
         val button = view.findViewById<Button>(R.id.start)
         button.setOnClickListener {
             view.findNavController().navigate(R.id.action_welcomeFragment_to_listFragment)
         }
+
         return view
     }
 }

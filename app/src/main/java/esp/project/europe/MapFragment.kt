@@ -71,10 +71,10 @@ class MapFragment : Fragment(){
 
             //Set the click listener
             marker.setOnMarkerClickListener { m, _ ->
-                //First close the old ones
+                //Firstly close the old ones
                 InfoWindow.closeAllInfoWindowsOn(map)
 
-                //Second, create the new
+                //Secondly, create the new
                 m.showInfoWindow()
                 true
             }

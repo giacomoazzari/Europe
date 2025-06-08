@@ -246,8 +246,8 @@ class DetailFragment : Fragment() {
         rootView.findViewById<TextView>(R.id.countryNameTextView).text = countryName
         rootView.findViewById<TextView>(R.id.capitalTextView).text = "Capital: $capital"
         rootView.findViewById<ImageView>(R.id.flagImageView).setImageResource(flagResId)
-        rootView.findViewById<TextView>(R.id.populationTextView).text = "Population: $population"
-        rootView.findViewById<TextView>(R.id.areaTextView).text = "Area: $area"
+        rootView.findViewById<TextView>(R.id.populationTextView).text = "Population: $population people"
+        rootView.findViewById<TextView>(R.id.areaTextView).text = "Area: $area km²"
         rootView.findViewById<TextView>(R.id.callingCodeTextView).text = "Calling Code: $callingCode"
         rootView.findViewById<TextView>(R.id.currencyTextView).text = "Currency: $currency"
     }
