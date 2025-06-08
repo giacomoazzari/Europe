@@ -1,13 +1,20 @@
 <resources>
     <string name="app_name">Europe</string>
-    <string name="welcome_text">Benvenuto in Europe!</string>
-    <string name="app_description">Scopri tutti i paesi del nostro continente: impara le bandiere ,
-        ascolta gli inni e usa la mappa interattiva per viaggiare con un semplice tocco.</string>
-    <string name="start">Inizia l\'esplorazione!</string>
-    <string name="hymn">\'s hymn</string>
+    <string name="welcome_text">Welcome to Europe!</string>
+    <string name="app_description">Discover all the countries of our continent:
+        learn the flags, listen to the anthems, and use the interactive map to travel with a simple tap.</string>
+    <string name="start">Start exploring!</string>
+    <string name="hymn">\'s anthem</string>
     <string name="go_to">See more</string>
     <string name="play">Play Hymn</string>
     <string name="stop">Stop Hymn</string>
-    <string name="temp_title">Titolo temporaneo</string>
+    <string name="temp_title">Temporary title</string>
+    <string name="lista">List</string>
+    <string name="mappa">Map</string>
+    <string name="capital">Capital: %1$s</string>
+    <string name="population">Population: %1$d people</string>
+    <string name="area">Area: %1$d km²</string>
+    <string name="callingCode">Calling code: %1$s </string>
+    <string name="currency">Currency: %1$s </string>
 
 </resources>

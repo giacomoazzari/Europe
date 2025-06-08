@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Europe</string>
+    <string name="welcome_text">Benvenuto in Europe!</string>
+    <string name="app_description">Scopri tutti i paesi del nostro continente: impara le bandiere, ascolta gli inni e usa la mappa interattiva per viaggiare con un semplice tocco.</string>
+    <string name="start">Inizia l\'esplorazione</string>
+    <string name="hymn">: inno nazionale</string>
+    <string name="go_to">Vedi i dettagli</string>
+    <string name="play">Riproduci</string>
+    <string name="stop">Pausa</string>
+    <string name="temp_title">Titolo temporaneo</string>
+    <string name="lista">Lista</string>
+    <string name="mappa">Mappa</string>
+    <string name="capital">Capitale: %1$s</string>
+    <string name="population">Popolazione: %1$d persone</string>
+    <string name="area">Estensione: %1$d km²</string>
+    <string name="callingCode">"Prefisso telefonico: %1$s "</string>
+    <string name="currency">"Moneta: %1$s "</string>
+</resources>

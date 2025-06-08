@@ -39,5 +39,13 @@ class ListFragment : Fragment() {
         //Set the adapter
         adapter = CountryAdapter(countryList, listener!!)
         recyclerView.adapter = adapter
+
+        // TODO: Restore the scroll position if the fragment is being recreated
+    }
+
+    // Saving the state
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // TODO: Save the scroll position
     }
 }

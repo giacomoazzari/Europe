@@ -16,13 +16,13 @@ import androidx.navigation.fragment.findNavController
 class DetailFragment : Fragment() {
 
     //Variables for the arguments
-    private lateinit var countryName: String
+    private var countryName: String = "N/D"
     private var flagResId: Int = 0
-    private lateinit var capital: String
+    private var capital: String = "N/D"
     private var population: Int = 0
     private var area: Int = 0
-    private lateinit var callingCode: String
-    private lateinit var currency: String
+    private var callingCode: String  = "N/D"
+    private var currency: String  = "N/D"
 
     //Variables for the hymn player
     private var isPlaying = false
@@ -37,6 +37,7 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
@@ -44,6 +45,23 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Check the state of the device
+        isDual = (activity as? MainActivity)?.isDualPane == true
+        isTablet = resources.configuration.smallestScreenWidthDp >= 600
+
+        playButton = view.findViewById(R.id.playHymnButton)
+
+        if(savedInstanceState != null){
+           countryName = savedInstanceState.getString("countryName", "")
+           flagResId = savedInstanceState.getInt("flagResId")
+           capital = savedInstanceState.getString("capital", "")
+           population = savedInstanceState.getInt("population")
+           area = savedInstanceState.getInt("area")
+           callingCode = savedInstanceState.getString("callingCode", "")
+           currency = savedInstanceState.getString("currency", "")
+           isPlaying = savedInstanceState.getBoolean("isPlaying")
+           playButton.text = if (isPlaying) getString(R.string.stop) else getString(R.string.play)
+       }
 
         //----------- code for the arguments---------------------//
         //Check if there are args
@@ -58,11 +76,6 @@ class DetailFragment : Fragment() {
             //Show the placeholder
             showWelcomePlaceholder()
         }
-
-        //Check the state of the device
-        isDual = (activity as? MainActivity)?.isDualPane == true
-        isTablet = resources.configuration.smallestScreenWidthDp >= 600
-
 
 
         //----------- code for the back button---------------------//
@@ -96,7 +109,6 @@ class DetailFragment : Fragment() {
         val context = requireContext()
 
         //Set the listener for the button
-        playButton = view.findViewById(R.id.playHymnButton)
         playButton.setOnClickListener {
 
             //Case 1: it's silent
@@ -166,6 +178,19 @@ class DetailFragment : Fragment() {
             playButton.text = getString(R.string.play)
 
         }
+    }
+
+    // Saving the state
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("countryName", countryName)
+        outState.putInt("flagResId", flagResId)
+        outState.putString("capital", capital)
+        outState.putInt("population", population)
+        outState.putInt("area", area)
+        outState.putString("callingCode", callingCode)
+        outState.putString("currency", currency)
+        outState.putBoolean("isPlaying", isPlaying)
     }
 
     //Private fun for getting the arguments
@@ -244,12 +269,12 @@ class DetailFragment : Fragment() {
         val rootView = requireView()
 
         rootView.findViewById<TextView>(R.id.countryNameTextView).text = countryName
-        rootView.findViewById<TextView>(R.id.capitalTextView).text = "Capital: $capital"
+        rootView.findViewById<TextView>(R.id.capitalTextView).text = getString(R.string.capital, capital)
         rootView.findViewById<ImageView>(R.id.flagImageView).setImageResource(flagResId)
-        rootView.findViewById<TextView>(R.id.populationTextView).text = "Population: $population people"
-        rootView.findViewById<TextView>(R.id.areaTextView).text = "Area: $area km²"
-        rootView.findViewById<TextView>(R.id.callingCodeTextView).text = "Calling Code: $callingCode"
-        rootView.findViewById<TextView>(R.id.currencyTextView).text = "Currency: $currency"
+        rootView.findViewById<TextView>(R.id.populationTextView).text = getString(R.string.population, population)
+        rootView.findViewById<TextView>(R.id.areaTextView).text = getString(R.string.area, area)
+        rootView.findViewById<TextView>(R.id.callingCodeTextView).text = getString(R.string.callingCode, callingCode)
+        rootView.findViewById<TextView>(R.id.currencyTextView).text = getString(R.string.currency, currency)
     }
 
     //Contains all the arguments for the fragment

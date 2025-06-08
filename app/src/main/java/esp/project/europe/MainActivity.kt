@@ -111,6 +111,13 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         Log.i(TAG, "notification permission granted: $p")
     }
 
+    // Saving the state
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // TODO: Save (and restore!) the state of lastSelectedCountryId
+        // TODO: Save (and restore!) the state of nav: NavController
+    }
+
     // Support method to check if the device is in tabletop state
     private fun isTabletopMode(layoutInfo: WindowLayoutInfo): Boolean {
         return layoutInfo.displayFeatures.any { feature ->
