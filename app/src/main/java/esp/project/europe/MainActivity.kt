@@ -72,9 +72,11 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
                                 //It's separated between tablet mode or classical
                                 if(isTablet){
-                                    setTabletMode()
+                                    Log.d("MainActivity", "Tablet mode")
+                                    setTabletMode(savedInstanceState)
                                 }
                                 else {
+                                    Log.d("MainActivity", "Classical mode")
                                     nav = findNavController(R.id.fragmentContainerView)
                                     setUpNavigation()
                                 }
@@ -86,7 +88,6 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                                     .replace(R.id.mapFragmentContainer, MapFragment())
                                     .replace(R.id.detailFragmentContainer, DetailFragment())
                                     .commit()
-                                //findViewById<BottomNavigationView?>(R.id.bottomNavigationMenu)?.visibility = View.GONE
                             }
 
                             //Book mode, optimized for the list
@@ -95,7 +96,6 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                                     .replace(R.id.listFragmentContainer, ListFragment())
                                     .replace(R.id.detailFragmentContainer, DetailFragment())
                                     .commit()
-                                //findViewById<BottomNavigationView?>(R.id.bottomNavigationMenu)?.visibility = View.GONE
                             }
                         }
                     }
@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
     }
 
     //Private fun for the bottom navigation button in tablet mode
-    private fun setTabletMode() {
+    private fun setTabletMode(savedInstanceState: Bundle?) {
         val fm = supportFragmentManager
         val trans = fm.beginTransaction()
 
@@ -220,28 +220,38 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         val mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
         val detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
 
-        //Add the fragments, if they don't exist
-        if(!detailFragment.isAdded) {
+
+
+        //Choose between first and saved fragment
+        if(savedInstanceState == null) {
+
+            //Add the fragments
             trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
-
-        }
-        if(!listFragment.isAdded) {
             trans.add(R.id.fragment_container_1, listFragment, "listFragment")
-        }
-        if(!mapFragment.isAdded) {
             trans.add(R.id.fragment_container_1, mapFragment, "mapFragment")
-        }
 
-        //Default mode is the list and detail
-        trans.show(listFragment)
-        trans.hide(mapFragment)
-        trans.show(detailFragment)
+            //Show correct ones, as default one is the list
+            trans.show(listFragment)
+            trans.hide(mapFragment)
+            trans.show(detailFragment)
+
+            //Update the state
+            activeFragment = listFragment
+
+        }
+        else {
+
+            if (!detailFragment.isAdded) {
+                trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
+            }
+            Log.d("MainActivity", "Detail fragment is detached: ${detailFragment.isDetached}")
+            if(!detailFragment.isVisible) {
+                trans.show(detailFragment)
+            }
+        }
 
         //Conclude setup
         trans.commit()
-
-        //Save the state
-        activeFragment = listFragment
 
         //Listener for the bottom navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
