@@ -9,11 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
@@ -72,12 +74,9 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
                                 //It's separated between tablet mode or classical
                                 if(isTablet){
-                                    Log.d("MainActivity", "Tablet mode")
                                     setTabletMode(savedInstanceState)
                                 }
                                 else {
-                                    Log.d("MainActivity", "Classical mode")
-                                    nav = findNavController(R.id.fragmentContainerView)
                                     setUpNavigation()
                                 }
                             }
@@ -114,6 +113,11 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
+        //Only in tablet mode
+        if(isTablet){
+            outState.putString("ActiveFragment", activeFragment?.tag)
+        }
         // TODO: Save (and restore!) the state of lastSelectedCountryId
         // TODO: Save (and restore!) the state of nav: NavController
     }
@@ -192,16 +196,30 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
     //Support method to set up the navigation, including logic for the bottom menù
     private fun setUpNavigation() {
-        if(currentLayout != R.layout.activity_main) return
+        if(currentLayout != R.layout.activity_main || isTablet) return
 
-        val navHost = findNavController(R.id.fragmentContainerView)
+        //Remove the detailFragment from the past container, because
+        //it creates errors if still in the memory but not used.
+        supportFragmentManager.findFragmentById(R.id.detailFragmentContainer)
+            ?.let {
+                supportFragmentManager.beginTransaction()
+                    .remove(it)
+                    .commit()
+            }
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+
+        nav = navHostFragment.navController
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
 
-        NavigationUI.setupWithNavController(bottomNav, navHost)
+        NavigationUI.setupWithNavController(bottomNav, nav)
+
 
         //Add a listener in order to hide the bottom menù when the user
         //is in the home or detail fragment
-        navHost.addOnDestinationChangedListener { _, destination, _ ->
+        nav.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.welcomeFragment -> bottomNav.visibility = View.GONE
                 R.id.detailFragment -> bottomNav.visibility = View.GONE
@@ -215,20 +233,24 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         val fm = supportFragmentManager
         val trans = fm.beginTransaction()
 
-        //Find the fragments
-        val listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()
-        val mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
-        val detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
+        //Define the variables for the fragments
+        val listFragment : Fragment
+        val mapFragment :Fragment
+        val detailFragment : Fragment
 
 
-
-        //Choose between first and saved fragment
+        //Two cases, first creation or recreation after a event
         if(savedInstanceState == null) {
 
-            //Add the fragments
-            trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
+            //Get the fragments from the tag
+            listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()
+            mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
+            detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
+
+            //First creation, add the fragments
             trans.add(R.id.fragment_container_1, listFragment, "listFragment")
             trans.add(R.id.fragment_container_1, mapFragment, "mapFragment")
+            trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
 
             //Show correct ones, as default one is the list
             trans.show(listFragment)
@@ -239,19 +261,45 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
             activeFragment = listFragment
 
         }
-        else {
+        else
+        {
 
-            if (!detailFragment.isAdded) {
-                trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
+            //Clean the container
+            fm.findFragmentById(R.id.fragment_container_1)?.let {
+                trans.remove(it)
             }
-            Log.d("MainActivity", "Detail fragment is detached: ${detailFragment.isDetached}")
-            if(!detailFragment.isVisible) {
-                trans.show(detailFragment)
-            }
+
+            //Get the past state
+            val activeFragmentName = savedInstanceState.getString("ActiveFragment") ?: "listFragment"
+            val otherFragmentName = if (activeFragmentName == "mapFragment") "listFragment" else "mapFragment"
+
+            //Create new instance of the fragments
+            listFragment = ListFragment()
+            mapFragment = MapFragment()
+            detailFragment = DetailFragment()
+
+            //Find the active fragment from the state
+            val activeFragment = if (activeFragmentName == "mapFragment") mapFragment else listFragment
+            val otherFragment = if (activeFragmentName == "mapFragment") listFragment else mapFragment
+
+            // Replace both for having them in the fragment container
+            trans.add(R.id.fragment_container_1, activeFragment, activeFragmentName)
+            trans.add(R.id.fragment_container_1, otherFragment, otherFragmentName)
+            trans.replace(R.id.detailFragmentContainer, detailFragment, "detailFragment")
+
+            //Show and hide correct ones
+            trans.hide(otherFragment)
+            trans.show(activeFragment)
+            trans.show(detailFragment)
+
+            this.activeFragment = activeFragment
+
         }
 
-        //Conclude setup
+        //Conclude setup, allowing for optimization (as suggested in Android guidelines)
+        trans.setReorderingAllowed(true)
         trans.commit()
+
 
         //Listener for the bottom navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)

@@ -2,6 +2,7 @@ package esp.project.europe
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,6 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
         isTablet = resources.configuration.smallestScreenWidthDp >= 600
@@ -81,6 +81,7 @@ class DetailFragment : Fragment() {
         //----------- code for the back button---------------------//
         //If it is in single pane mode, a back button is necessary
         if(!isDual && !isTablet) {
+
             //Find the toolbar, the activity and the navigator
             val navController = findNavController()
             val activity = requireActivity() as AppCompatActivity
