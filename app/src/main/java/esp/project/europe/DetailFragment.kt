@@ -2,7 +2,6 @@ package esp.project.europe
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,23 +44,30 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
         isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
         playButton = view.findViewById(R.id.playHymnButton)
 
-        if(savedInstanceState != null){
-           countryName = savedInstanceState.getString("countryName", "")
-           flagResId = savedInstanceState.getInt("flagResId")
-           capital = savedInstanceState.getString("capital", "")
-           population = savedInstanceState.getInt("population")
-           area = savedInstanceState.getInt("area")
-           callingCode = savedInstanceState.getString("callingCode", "")
-           currency = savedInstanceState.getString("currency", "")
-           isPlaying = savedInstanceState.getBoolean("isPlaying")
-           playButton.text = if (isPlaying) getString(R.string.stop) else getString(R.string.play)
-       }
+        if(savedInstanceState != null) {
+            countryName = savedInstanceState.getString("countryName", "N/D")
+            flagResId = savedInstanceState.getInt("flagResId", 0)
+            capital = savedInstanceState.getString("capital", "N/D")
+            population = savedInstanceState.getInt("population", 0)
+            area = savedInstanceState.getInt("area", 0)
+            callingCode = savedInstanceState.getString("callingCode", "N/D")
+            currency = savedInstanceState.getString("currency", "N/D")
+            isPlaying = savedInstanceState.getBoolean("isPlaying", false)
+
+            showCountryDetails()
+
+            // Aggiorna lo stato del bottone
+            playButton.text = if (isPlaying) getString(R.string.stop) else getString(R.string.play)
+
+            //TODO: Restoring state of open display (open to open, open to book, open to close et viceversa)
+        }else
 
         //----------- code for the arguments---------------------//
         //Check if there are args
@@ -192,6 +198,7 @@ class DetailFragment : Fragment() {
         outState.putString("callingCode", callingCode)
         outState.putString("currency", currency)
         outState.putBoolean("isPlaying", isPlaying)
+        // TODO: Save (and restore!) save of anthem playing (continue playing without interrupt): needs to be modified onPause
     }
 
     //Private fun for getting the arguments

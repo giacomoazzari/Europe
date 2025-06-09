@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/detail_container"
     android:layout_width="match_parent"
@@ -20,12 +21,21 @@
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Click a state!"
+            android:text="@string/click_a_state"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center" />
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <!--Flag and button on the left-->
     <LinearLayout
@@ -45,7 +55,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"
-            android:contentDescription="country flag"
+            android:contentDescription="@string/country_flag_placeholder"
             android:scaleType="fitCenter" />
 
         <Button
@@ -53,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Play Hymn"
+            android:text="@string/play"
             android:textSize="18sp"
             android:layout_gravity="center"
             android:backgroundTint="@color/blue"/>
@@ -76,7 +86,7 @@
             android:id="@+id/countryNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Country Name"
+            android:text="@string/country_name_placeholder"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -86,7 +96,7 @@
             android:id="@+id/capitalTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Capital: "
+            android:text="@string/capital_placeholder"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:gravity="center" />
@@ -95,7 +105,7 @@
             android:id="@+id/populationTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Population: "
+            android:text="@string/population_placeholder"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:gravity="center" />
@@ -104,7 +114,7 @@
             android:id="@+id/areaTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Area: "
+            android:text="@string/area_placeholder"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:gravity="center"/>
@@ -113,7 +123,7 @@
             android:id="@+id/callingCodeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calling Code: "
+            android:text="@string/calling_code_placeholder"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:gravity="center"/>
@@ -122,7 +132,7 @@
             android:id="@+id/currencyTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Currency: "
+            android:text="@string/currency_placeholder"
             android:textSize="18sp"
             android:layout_marginTop="8dp"
             android:gravity="center"/>

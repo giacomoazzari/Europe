@@ -128,8 +128,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         if(isTablet){
             outState.putString("ActiveFragment", activeFragment?.tag)
         }
-        // TODO: Save (and restore!) the state of lastSelectedCountryId
-        // TODO: Save (and restore!) the state of nav: NavController
+
     }
 
     // Support method to check if the device is in tabletop state

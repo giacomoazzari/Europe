@@ -110,7 +110,36 @@ class MapFragment : Fragment(){
         //Invalidate to guarantee the changes
         map.invalidate()
 
+        if(savedInstanceState != null){
+            val center = GeoPoint(savedInstanceState.getDouble("map_latitude"),
+                savedInstanceState.getDouble("map_longitude"))
+            map.controller.setCenter(center)
+            map.controller.setZoom(savedInstanceState.getDouble("map_zoom"))
+            // TODO: Restore selected state
+        }
+
         return mapview
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        // Save map position
+        val center = map.mapCenter as GeoPoint
+        outState.putDouble("map_latitude", center.latitude)
+        outState.putDouble("map_longitude", center.longitude)
+
+        // Save zoom
+        outState.putDouble("map_zoom", map.zoomLevelDouble)
+
+        // Save selected state, if any
+        val selectedMarker = map.overlays
+            .filterIsInstance<Marker>()
+            .firstOrNull { it.isInfoWindowOpen }
+
+        selectedMarker?.let {
+            outState.putString("selected_state", it.title)
+        }
     }
 
     override fun onPause() {

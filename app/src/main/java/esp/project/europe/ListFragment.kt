@@ -2,6 +2,7 @@ package esp.project.europe
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,12 +41,21 @@ class ListFragment : Fragment() {
         adapter = CountryAdapter(countryList, listener!!)
         recyclerView.adapter = adapter
 
-        // TODO: Restore the scroll position if the fragment is being recreated
+
+        // Restore the state, if any
+        if (savedInstanceState != null) {
+            val savedState = savedInstanceState.getParcelable<Parcelable>("scroll_position")
+            recyclerView.layoutManager?.onRestoreInstanceState(savedState)
+        }
+        //TODO: Test saving scroll state with the open device
     }
 
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // TODO: Save the scroll position
+        val layoutManager = recyclerView.layoutManager
+        if (layoutManager != null) {
+            outState.putParcelable("scroll_position", layoutManager.onSaveInstanceState())
+        }
     }
 }

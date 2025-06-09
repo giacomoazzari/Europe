@@ -55,7 +55,6 @@ object CountriesData {
         Country("Wales", R.drawable.wales, "Cardiff", 3136000, 20779, "+44", "Pound sterling")
     )
 
-
     fun getCountries(): List<Country> {
         return countries
     }
@@ -63,4 +62,5 @@ object CountriesData {
     fun getCountryByName(name: String): Country? {
         return countries.find { it.name == name }
     }
+
 }

@@ -16,5 +16,140 @@
     <string name="area">Area: %1$d km²</string>
     <string name="callingCode">Calling code: %1$s </string>
     <string name="currency">Currency: %1$s </string>
+    <string name="click_a_state">Click a state!</string>
+    <string name="country_flag_placeholder" translatable="false">country flag</string>
+    <string name="country_name_placeholder" translatable="false">Country Name</string>
+    <string name="capital_placeholder" translatable="false">Capital</string>
+    <string name="population_placeholder" translatable="false">Population</string>
+    <string name="area_placeholder" translatable="false">Area</string>
+    <string name="calling_code_placeholder" translatable="false">Calling Code</string>
+    <string name="currency_placeholder" translatable="false">Currency</string>
+
+    <!-- COUNTRIES STRINGS -->
+    <!-- Names -->
+    <string name="albania">Albania</string>
+    <string name="andorra">Andorra</string>
+    <string name="austria">Austria</string>
+    <string name="belarus">Belarus</string>
+    <string name="belgium">Belgium</string>
+    <string name="bosnia_and_herzegovina">Bosnia and Herzegovina</string>
+    <string name="bulgaria">Bulgaria</string>
+    <string name="croatia">Croatia</string>
+    <string name="czech_republic">Czech Republic</string>
+    <string name="denmark">Denmark</string>
+    <string name="england">England</string>
+    <string name="estonia">Estonia</string>
+    <string name="europe">Europe</string>
+    <string name="finland">Finland</string>
+    <string name="france">France</string>
+    <string name="georgia">Georgia</string>
+    <string name="germany">Germany</string>
+    <string name="greece">Greece</string>
+    <string name="greenland">Greenland</string>
+    <string name="hungary">Hungary</string>
+    <string name="iceland">Iceland</string>
+    <string name="ireland">Ireland</string>
+    <string name="italy">Italy</string>
+    <string name="ladinia">Ladinia</string>
+    <string name="kosovo">Kosovo</string>
+    <string name="latvia">Latvia</string>
+    <string name="liechtenstein">Liechtenstein</string>
+    <string name="lithuania">Lithuania</string>
+    <string name="luxembourg">Luxembourg</string>
+    <string name="malta">Malta</string>
+    <string name="moldova">Moldova</string>
+    <string name="monaco">Monaco</string>
+    <string name="montenegro">Montenegro</string>
+    <string name="netherlands">Netherlands</string>
+    <string name="north_macedonia">North Macedonia</string>
+    <string name="norway">Norway</string>
+    <string name="poland">Poland</string>
+    <string name="portugal">Portugal</string>
+    <string name="romania">Romania</string>
+    <string name="scotland">Scotland</string>
+    <string name="serbia">Serbia</string>
+    <string name="slovakia">Slovakia</string>
+    <string name="slovenia">Slovenia</string>
+    <string name="spain">Spain</string>
+    <string name="sweden">Sweden</string>
+    <string name="switzerland">Switzerland</string>
+    <string name="ukraine">Ukraine</string>
+    <string name="united_kingdom">United Kingdom</string>
+    <string name="vatican_city">Vatican City</string>
+    <string name="veneto">Veneto</string>
+    <string name="wales">Wales</string>
+
+    <!-- Capitals: omitted states that have themselves or other states' capitals as their capitals
+                    (Monaco, Vatican City, Europe) -->
+    <string name="tirana">Tirana</string>
+    <string name="andorra_la_vella">Andorra la Vella</string>
+    <string name="vienna">Vienna</string>
+    <string name="minsk">Minsk</string>
+    <string name="brussels">Brussels</string>
+    <string name="sarajevo">Sarajevo</string>
+    <string name="sofia">Sofia</string>
+    <string name="zagreb">Zagreb</string>
+    <string name="prague">Prague</string>
+    <string name="copenhagen">Copenhagen</string>
+    <string name="london">London</string>
+    <string name="tallinn">Tallinn</string>
+    <string name="helsinki">Helsinki</string>
+    <string name="paris">Paris</string>
+    <string name="tbilisi">Tbilisi</string>
+    <string name="berlin">Berlin</string>
+    <string name="athens">Athens</string>
+    <string name="nuuk">Nuuk</string>
+    <string name="budapest">Budapest</string>
+    <string name="reykjavík">Reykjavík</string>
+    <string name="dublin">Dublin</string>
+    <string name="rome">Rome</string>
+    <string name="sen_jan">Sèn Jan</string>
+    <string name="pristina">Pristina</string>
+    <string name="riga">Riga</string>
+    <string name="vaduz">Vaduz</string>
+    <string name="vilnius">Vilnius</string>
+    <string name="luxembourg_city">Luxembourg</string>
+    <string name="valletta">Valletta</string>
+    <string name="chisinau">Chișinău</string>
+    <string name="podgorica">Podgorica</string>
+    <string name="amsterdam">Amsterdam</string>
+    <string name="skopje">Skopje</string>
+    <string name="oslo">Oslo</string>
+    <string name="warsaw">Warsaw</string>
+    <string name="lisbon">Lisbon</string>
+    <string name="bucharest">Bucharest</string>
+    <string name="edinburgh">Edinburgh</string>
+    <string name="belgrade">Belgrade</string>
+    <string name="bratislava">Bratislava</string>
+    <string name="ljubljana">Ljubljana</string>
+    <string name="madrid">Madrid</string>
+    <string name="stockholm">Stockholm</string>
+    <string name="bern">Bern</string>
+    <string name="kyiv">Kyiv</string>
+    <string name="venexia">Venice</string>
+    <string name="cardiff">Cardiff</string>
+
+    <!-- Currencies -->
+    <string name="lek">Lek</string>
+    <string name="euro">Euro</string>
+    <string name="belarusian_ruble">Belarusian ruble</string>
+    <string name="convertible_mark">Convertible mark</string>
+    <string name="lev">Lev</string>
+    <string name="czech_koruna">Czech koruna</string>
+    <string name="danish_krona">Danish krone</string>
+    <string name="pound_sterling">Pound sterling</string>
+    <string name="varies">Varies</string>
+    <string name="lari">Lari</string>
+    <string name="hungarian_forint">Hungarian forint</string>
+    <string name="icelandic_crona">Icelandic króna</string>
+    <string name="swiss_franc">Swiss franc</string>
+    <string name="moldovan_leu">Moldovan leu</string>
+    <string name="macedonian_denar">Macedonian denar</string>
+    <string name="norwegian_krone">Norwegian krone</string>
+    <string name="zloty">Złoty</string>
+    <string name="romanian_leu">Romanian leu</string>
+    <string name="serbian_dinar">Serbian dinar</string>
+    <string name="sweden_krone">Swedish krona</string>
+    <string name="grivnia">Hryvnia</string>
 
 </resources>
