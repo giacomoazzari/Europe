@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CountryAdapter(
     private val countryList: List<Country>,
-    private val listener: OnCountrySelectedListener
+    private val listener: OnNavigationButtonsListener
     ) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 
         // TAG for logging

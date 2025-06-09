@@ -18,11 +18,11 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 class MapFragment : Fragment(){
 
     private lateinit var map: MapView
-    private var listener: OnCountrySelectedListener? = null
+    private var listener: OnNavigationButtonsListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as? OnCountrySelectedListener
+        listener = context as? OnNavigationButtonsListener
     }
     override fun onCreateView(
         inflater: LayoutInflater,

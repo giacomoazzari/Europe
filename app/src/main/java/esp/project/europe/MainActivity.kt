@@ -23,18 +23,21 @@ import kotlinx.coroutines.launch
 import androidx.window.layout.WindowLayoutInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
+class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
     private var activeFragment: Fragment? = null
     private lateinit var nav: NavController
     private var currentLayout : Int = 0
     private var isTablet: Boolean = false
-        private set
+    private var savedState: Bundle? = null
     var isDualPane: Boolean = false
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Put the saved state in a variable used later on
+        savedState = savedInstanceState
 
         //Check the permissions
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -74,7 +77,14 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
                                 //It's separated between tablet mode or classical
                                 if(isTablet){
-                                    setTabletMode(savedInstanceState)
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(R.id.fragment_container_1, WelcomeFragment())
+                                        .replace(R.id.detailFragmentContainer, WelcomeFragment())
+                                        .commit()
+
+                                    //Hide the bottom menù in the welcome fragment
+                                    val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
+                                    bottomNav.visibility = View.GONE
                                 }
                                 else {
                                     setUpNavigation()
@@ -84,16 +94,16 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
                             //Tabletop mode, optimized for the map
                             R.layout.tabletop_layout -> {
                                 supportFragmentManager.beginTransaction()
-                                    .replace(R.id.mapFragmentContainer, MapFragment())
-                                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                                    .replace(R.id.mapFragmentContainer, WelcomeFragment())
+                                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
                                     .commit()
                             }
 
                             //Book mode, optimized for the list
                             R.layout.book_layout -> {
                                 supportFragmentManager.beginTransaction()
-                                    .replace(R.id.listFragmentContainer, ListFragment())
-                                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                                    .replace(R.id.listFragmentContainer, WelcomeFragment())
+                                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
                                     .commit()
                             }
                         }
@@ -192,6 +202,30 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
         {
             nav.navigate(mapAction)
         }
+    }
+
+    override fun onDiscoverButtonClick(provenience: State) {
+
+        //Distinguish between the provenience of the call for creating the correct UI
+        when (provenience) {
+            State.TABLET -> {
+                setTabletMode(savedState)
+            }
+            State.BOOK -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.listFragmentContainer, ListFragment())
+                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                    .commit()
+
+            }
+            State.TABLETOP -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.mapFragmentContainer, MapFragment())
+                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                    .commit()
+            }
+        }
+
     }
 
     //Support method to set up the navigation, including logic for the bottom menù
@@ -303,6 +337,7 @@ class MainActivity : AppCompatActivity(), OnCountrySelectedListener {
 
         //Listener for the bottom navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
+        bottomNav.visibility = View.VISIBLE
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
 

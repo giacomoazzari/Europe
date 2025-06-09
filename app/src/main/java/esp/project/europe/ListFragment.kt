@@ -14,11 +14,11 @@ class ListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CountryAdapter
-    private var listener: OnCountrySelectedListener? = null
+    private var listener: OnNavigationButtonsListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as? OnCountrySelectedListener
+        listener = context as? OnNavigationButtonsListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

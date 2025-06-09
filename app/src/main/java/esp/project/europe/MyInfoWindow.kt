@@ -9,7 +9,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 class MyInfoWindow (
     mapView: MapView,
     private val countryName: String,
-    private val listener: OnCountrySelectedListener
+    private val listener: OnNavigationButtonsListener
 ) : InfoWindow(R.layout.info_window, mapView) {
 
     override fun onOpen(item: Any?) {

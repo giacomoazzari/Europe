@@ -4,6 +4,11 @@ enum class Origin {
     LIST, MAP
 }
 
-interface OnCountrySelectedListener {
+enum class State {
+    TABLETOP, BOOK, TABLET
+}
+
+interface OnNavigationButtonsListener {
     fun onCountrySelected(country: Country?, provenience: Origin)
+    fun onDiscoverButtonClick(provenience: State)
 }
