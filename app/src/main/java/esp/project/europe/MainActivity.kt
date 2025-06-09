@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.emptyLongSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
@@ -69,43 +70,12 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                         isDualPane = isBookMode(layoutInfo) || isTabletopMode(layoutInfo)
                         isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
-                        //Upload the correct fragment looking at the layout
-                        when (newLayout) {
-
-                            //First case, the main mode
-                            R.layout.activity_main -> {
-
-                                //It's separated between tablet mode or classical
-                                if(isTablet){
-                                    supportFragmentManager.beginTransaction()
-                                        .replace(R.id.fragment_container_1, WelcomeFragment())
-                                        .replace(R.id.detailFragmentContainer, WelcomeFragment())
-                                        .commit()
-
-                                    //Hide the bottom menù in the welcome fragment
-                                    val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
-                                    bottomNav.visibility = View.GONE
-                                }
-                                else {
-                                    setUpNavigation()
-                                }
-                            }
-
-                            //Tabletop mode, optimized for the map
-                            R.layout.tabletop_layout -> {
-                                supportFragmentManager.beginTransaction()
-                                    .replace(R.id.mapFragmentContainer, WelcomeFragment())
-                                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
-                                    .commit()
-                            }
-
-                            //Book mode, optimized for the list
-                            R.layout.book_layout -> {
-                                supportFragmentManager.beginTransaction()
-                                    .replace(R.id.listFragmentContainer, WelcomeFragment())
-                                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
-                                    .commit()
-                            }
+                        //Choose between first creation or recreation
+                        if(savedInstanceState == null) {
+                            setNewLayout(newLayout)
+                        }
+                        else{
+                            setOldLayout(newLayout, savedInstanceState)
                         }
                     }
             }
@@ -150,6 +120,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         }
     }
 
+    /*This function is called by the fragment when a country is selected.
+    * It's implemented here because the fragments can't handle the navigation alone
+    * during a two panel visualization. So it's centralized here in the main with this
+    * specific function, which bases its actions on the provenience of the call.*/
     override fun onCountrySelected(country: Country?, provenience: Origin) {
         if(country == null) {
             Log.w("MainActivity", "Country selected is null")
@@ -204,6 +178,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         }
     }
 
+    /*This private function is called by the welcomeFragment when the user clicks on the
+    * discover button. It creates the correct layout for the device, based on the state the device had
+    * when the call was made. It's made here due to the impossibility for a fragment to
+    * handle the navigation in a two panel visualization.*/
     override fun onDiscoverButtonClick(provenience: State) {
 
         //Distinguish between the provenience of the call for creating the correct UI
@@ -228,7 +206,93 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
     }
 
-    //Support method to set up the navigation, including logic for the bottom menù
+    /*This is a support function which is called by the onCreate function and
+    * adds the welcome fragment to the correct container, based on the state
+    * of the device at the moment of the call.*/
+    private fun setNewLayout(newLayout: Int) {
+
+        //Upload the correct fragment looking at the layout
+        when (newLayout) {
+
+            //First case, the main mode
+            R.layout.activity_main -> {
+
+                //It's separated between tablet mode or classical
+                if (isTablet) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_1, WelcomeFragment())
+                        .replace(R.id.detailFragmentContainer, WelcomeFragment())
+                        .commit()
+
+                    //Hide the bottom menù in the welcome fragment
+                    val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
+                    bottomNav.visibility = View.GONE
+                }
+                else
+                {
+                    setUpNavigation()
+                }
+            }
+
+            //Tabletop mode
+            R.layout.tabletop_layout -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.mapFragmentContainer, WelcomeFragment())
+                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
+                    .commit()
+            }
+
+            //Book mode
+            R.layout.book_layout -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.listFragmentContainer, WelcomeFragment())
+                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
+                    .commit()
+            }
+        }
+    }
+
+    /*This is a function called by the onCreate function and it has the role of putting
+    * the correct fragment in the correct container, based on the state of the device.
+    * It's used when the activity is recreated after a configuration change, so it doesn't have to show
+    * a welcome fragment*/
+    private fun setOldLayout(newLayout: Int, savedInstanceState: Bundle?) {
+        //Upload the correct fragment looking at the layout
+        when (newLayout) {
+
+            //First case, the main mode
+            R.layout.activity_main -> {
+
+                //It's separated between tablet mode or classical
+                if (isTablet) {
+                    setTabletMode(savedInstanceState)
+                } else {
+                    setUpNavigation()
+                }
+            }
+
+            //Tabletop mode, optimized for the map
+            R.layout.tabletop_layout -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.mapFragmentContainer, MapFragment())
+                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                    .commit()
+            }
+
+            //Book mode, optimized for the list
+            R.layout.book_layout -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.listFragmentContainer, ListFragment())
+                    .replace(R.id.detailFragmentContainer, DetailFragment())
+                    .commit()
+            }
+        }
+    }
+
+    /*This function is used to set up the navigation, including logic for the bottom menù,
+    * in the case of a classical portrait or landscape device. It handles with a navController
+    * the movement between single fragments. It's done here because of the centralization of
+    * all the navigation controls. */
     private fun setUpNavigation() {
         if(currentLayout != R.layout.activity_main || isTablet) return
 
@@ -262,7 +326,9 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         }
     }
 
-    //Private fun for the bottom navigation button in tablet mode
+    /*This function is called by the layout setter function to create the tablet layouts.
+    * It distinguish alone the difference between the first creation or a recreation of the
+    * activity and, based on that, it handles differently the fragments.*/
     private fun setTabletMode(savedInstanceState: Bundle?) {
         val fm = supportFragmentManager
         val trans = fm.beginTransaction()
@@ -356,6 +422,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         }
     }
 
+    /*This is a support function used by the tablet layout setter to change the fragments
+    * when the user navigates with the bottom menu.*/
     private fun switchFragment(fragmentToShow: Fragment) {
 
         //If already active, return
