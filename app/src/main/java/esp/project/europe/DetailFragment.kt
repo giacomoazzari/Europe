@@ -51,30 +51,13 @@ class DetailFragment : Fragment() {
 
         playButton = view.findViewById(R.id.playHymnButton)
 
-        if(savedInstanceState != null) {
-            countryName = savedInstanceState.getString("countryName", "N/D")
-            flagResId = savedInstanceState.getInt("flagResId", 0)
-            capital = savedInstanceState.getString("capital", "N/D")
-            population = savedInstanceState.getInt("population", 0)
-            area = savedInstanceState.getInt("area", 0)
-            callingCode = savedInstanceState.getString("callingCode", "N/D")
-            currency = savedInstanceState.getString("currency", "N/D")
-            isPlaying = savedInstanceState.getBoolean("isPlaying", false)
-
-            showCountryDetails()
-
-            // Aggiorna lo stato del bottone
-            playButton.text = if (isPlaying) getString(R.string.stop) else getString(R.string.play)
-
-            //TODO: Restoring state of open display (open to open, open to book, open to close et viceversa)
-        }else
 
         //----------- code for the arguments---------------------//
         //Check if there are args
-        if(arguments != null) {
+        if(arguments != null || savedInstanceState != null) {
 
             //Get the arguments and show them
-            getTheArguments()
+            getTheArguments(savedInstanceState)
             showCountryDetails()
         }
         else {
@@ -112,6 +95,7 @@ class DetailFragment : Fragment() {
 
 
         //----------- code for the hymn player---------------------//
+        //TODO: Restoring state of open display (open to open, open to book, open to close et viceversa)
         //Require context
         val context = requireContext()
 
@@ -202,11 +186,22 @@ class DetailFragment : Fragment() {
     }
 
     //Private fun for getting the arguments
-    private fun getTheArguments() {
+    private fun getTheArguments(savedInstanceState: Bundle?) {
 
-        //Two cases, single or dual mode
-        if (isDual || isTablet) {
-            //Case 1: get data from the bundle
+        //Three cases, one from saved state, one from bundle, one from arguments
+        if(savedInstanceState != null) {
+            //Case 1: get data from past state
+            countryName = savedInstanceState.getString("countryName", "N/D")
+            flagResId = savedInstanceState.getInt("flagResId", 0)
+            capital = savedInstanceState.getString("capital", "N/D")
+            population = savedInstanceState.getInt("population", 0)
+            area = savedInstanceState.getInt("area", 0)
+            callingCode = savedInstanceState.getString("callingCode", "N/D")
+            currency = savedInstanceState.getString("currency", "N/D")
+            isPlaying = savedInstanceState.getBoolean("isPlaying", false)
+
+        }else if (isDual || isTablet) {
+            //Case 2: get data from the bundle
             val args = requireArguments()
             countryName = args.getString(ARG_COUNTRY_NAME, "")
             flagResId = args.getInt(ARG_FLAG_RES_ID)
@@ -217,7 +212,7 @@ class DetailFragment : Fragment() {
             currency = args.getString(ARG_CURRENCY, "")
 
         } else {
-            //Case 2: get data from the arguments
+            //Case 3: get data from the arguments
             val args = DetailFragmentArgs.fromBundle(requireArguments())
             countryName = args.countryName
             flagResId = args.flagResId

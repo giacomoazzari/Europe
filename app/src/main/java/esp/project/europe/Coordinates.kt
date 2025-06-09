@@ -1,5 +1,6 @@
 package esp.project.europe
 
+
 import org.osmdroid.util.GeoPoint
 
 object Coordinates {
@@ -52,7 +53,7 @@ object Coordinates {
         GeoPoint(60.1282, 18.6435) to "Sweden",
         GeoPoint(46.8182, 8.2275) to "Switzerland",
         GeoPoint(48.3794, 31.1656) to "Ukraine",
-        GeoPoint(55.3781, -3.4360) to "United Kindgom",
+        GeoPoint(55.3781, -3.4360) to "United Kingdom",
         GeoPoint(41.9029, 12.4534) to "Vatican City",
         GeoPoint(45.4419, 12.3155) to "Veneto",
         GeoPoint(52.1307, -3.7837) to "Wales",
@@ -61,6 +62,10 @@ object Coordinates {
 
     fun getCoordinates() : List<Pair<GeoPoint, String>> {
         return points
+    }
+
+    fun getCoordinatesByName(name: String): Pair<GeoPoint, String>? {
+        return points.find { it.second == name }
     }
 
 }

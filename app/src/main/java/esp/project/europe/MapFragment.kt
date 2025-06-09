@@ -19,6 +19,7 @@ class MapFragment : Fragment(){
 
     private lateinit var map: MapView
     private var listener: OnNavigationButtonsListener? = null
+    private lateinit var selectedCountry: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -76,6 +77,7 @@ class MapFragment : Fragment(){
 
                 //Secondly, create the new
                 m.showInfoWindow()
+                selectedCountry = m.title
                 true
             }
 
@@ -107,16 +109,50 @@ class MapFragment : Fragment(){
         //Add the overlay
         map.overlays.add(mapEvents)
 
-        //Invalidate to guarantee the changes
-        map.invalidate()
-
+        //If a info window was open, now restore the state
         if(savedInstanceState != null){
+
+            //Get and set the initial position and zoom
             val center = GeoPoint(savedInstanceState.getDouble("map_latitude"),
                 savedInstanceState.getDouble("map_longitude"))
             map.controller.setCenter(center)
             map.controller.setZoom(savedInstanceState.getDouble("map_zoom"))
-            // TODO: Restore selected state
+
+            //Get the selected state, if any
+            val marker = Marker(map)
+            val stateName = savedInstanceState.getString("selected_state")
+
+            //Check the esistance of the state and then open the marker
+            if(stateName != null) {
+                val state = Coordinates.getCoordinatesByName(stateName)
+                marker.position = state!!.first
+                marker.title = state.second
+
+                //Get the info widget, with the listener for navigation
+                val info = MyInfoWindow(map, state.second, listener!!)
+
+                //Put the info on the marker
+                marker.infoWindow = info
+
+                //Set the click listener
+                marker.setOnMarkerClickListener { m, _ ->
+                    //Firstly close the old ones
+                    InfoWindow.closeAllInfoWindowsOn(map)
+
+                    //Secondly, create the new
+                    m.showInfoWindow()
+                    selectedCountry = m.title
+                    true
+                }
+
+                //Add the marker to the map
+                map.overlays.add(marker)
+            }
         }
+
+
+        //Invalidate to guarantee the changes
+        map.invalidate()
 
         return mapview
     }
