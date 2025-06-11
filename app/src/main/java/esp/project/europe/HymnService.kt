@@ -124,8 +124,8 @@ class HymnService : Service() {
         {
             Notification.Builder(applicationContext, CHANNEL_ID)
         }
-        notificationBuilder.setContentTitle("National anthem of ${countryName.replace("_", " ")}")
-        notificationBuilder.setContentText("Tap here to return to the app")
+        notificationBuilder.setContentTitle("${countryName.replace("_", " ")}'s national anthem ")
+        notificationBuilder.setContentText("Now playing the national anthem")
         notificationBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT)
         notificationBuilder.setSmallIcon(android.R.drawable.ic_media_play)
 
