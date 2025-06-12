@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                             currentLayout = newLayout
                         }
 
-                        //Check for the state of the device
+                        //Update the state of the device
                         isDualPane = isBookMode(layoutInfo) || isTabletopMode(layoutInfo)
                         isTablet = resources.configuration.smallestScreenWidthDp >= 600
 
@@ -217,7 +217,6 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 if (isTablet) {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container_1, WelcomeFragment())
-                        .replace(R.id.detailFragmentContainer, WelcomeFragment())
                         .commit()
 
                     //Hide the bottom menù in the welcome fragment
@@ -234,7 +233,6 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             R.layout.tabletop_layout -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.mapFragmentContainer, WelcomeFragment())
-                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
                     .commit()
             }
 
@@ -242,7 +240,6 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             R.layout.book_layout -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.listFragmentContainer, WelcomeFragment())
-                    .replace(R.id.detailFragmentContainer, WelcomeFragment())
                     .commit()
             }
         }
@@ -337,6 +334,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
         //Two cases, first creation or recreation after a event
         if(savedInstanceState == null) {
+            //Clean the container
+            fm.findFragmentById(R.id.fragment_container_1)?.let {
+                trans.remove(it)
+            }
 
             //Get the fragments from the tag
             listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()

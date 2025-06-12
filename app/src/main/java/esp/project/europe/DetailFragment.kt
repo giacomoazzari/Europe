@@ -2,6 +2,7 @@ package esp.project.europe
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -174,6 +175,7 @@ class DetailFragment : Fragment() {
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        Log.d("DetailFragment", "onSaveInstanceState called")
         outState.putString("countryName", countryName)
         outState.putInt("flagResId", flagResId)
         outState.putString("capital", capital)
@@ -199,6 +201,7 @@ class DetailFragment : Fragment() {
             callingCode = savedInstanceState.getString("callingCode", "N/D")
             currency = savedInstanceState.getString("currency", "N/D")
             isPlaying = savedInstanceState.getBoolean("isPlaying", false)
+            Log.d("DetailFragment", "Getting arguments from saved Bundle $countryName")
 
         }else if (isDual || isTablet) {
             //Case 2: get data from the bundle
