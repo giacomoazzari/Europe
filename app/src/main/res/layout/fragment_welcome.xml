@@ -40,5 +40,5 @@
         android:textColorLink="@color/white"
         android:fontFamily="sans-serif-smallcaps"
         android:layout_margin="10sp"
-        app:backgroundTint="#3F51B5" />
+        app:backgroundTint="@color/indigo"/>
 </LinearLayout>

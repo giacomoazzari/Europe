@@ -66,7 +66,7 @@
             android:text="@string/play"
             android:textSize="18sp"
             android:layout_gravity="center"
-            android:backgroundTint="@color/blue"/>
+            android:backgroundTint="@color/indigo"/>
 
     </LinearLayout>
 
