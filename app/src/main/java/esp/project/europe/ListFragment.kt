@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import esp.project.europe.CountriesData.getCountries
 
+@Suppress("DEPRECATION")
 class ListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
@@ -53,9 +54,10 @@ class ListFragment : Fragment() {
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val layoutManager = recyclerView.layoutManager
-        if (layoutManager != null) {
-            outState.putParcelable("scroll_position", layoutManager.onSaveInstanceState())
+        if (::recyclerView.isInitialized) { // avoids the call if the recycle view is not yet initialized
+            recyclerView.layoutManager?.let {
+                outState.putParcelable("scroll_position", it.onSaveInstanceState())
+            }
         }
     }
 }
