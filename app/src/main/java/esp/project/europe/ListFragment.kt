@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import esp.project.europe.CountriesData.getCountries
 
-@Suppress("DEPRECATION")
 class ListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
