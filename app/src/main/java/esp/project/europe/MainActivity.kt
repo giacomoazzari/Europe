@@ -23,19 +23,30 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
+    //Variables for tracking the state
     private var activeFragment: Fragment? = null
-    private lateinit var nav: NavController
+    private var activeNation: Country? = null
     private var currentLayout : Int = 0
+
+    //Variable for the navigation
+    private lateinit var nav: NavController
+
+    //Variables for tracking the position of the device
     private var isTablet: Boolean = false
-    private var savedState: Bundle? = null
     var isDualPane: Boolean = false
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Put the saved state in a variable used later on
-        savedState = savedInstanceState
+
+        //Get the state of the past activity
+        val activeNationName = savedInstanceState?.getString("ActiveNation") ?: ""
+        activeNation = CountriesData.getCountryByName(activeNationName)
+
+        val activeFragmentTag = savedInstanceState?.getString("ActiveFragment")
+        activeFragment = supportFragmentManager.findFragmentByTag(activeFragmentTag)
+
 
         //Check the permissions
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -69,10 +80,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
                         //Choose between first creation or recreation
                         if(savedInstanceState == null) {
-                            setNewLayout(newLayout)
+                            setWelcomeLayout(newLayout)
                         }
                         else{
-                            setOldLayout(newLayout, savedInstanceState)
+                            setDiscoverLayout(newLayout, activeFragment)
                         }
                     }
             }
@@ -95,6 +106,9 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         if(isTablet){
             outState.putString("ActiveFragment", activeFragment?.tag)
         }
+
+        //Save the state of the detail fragment
+        outState.putString("ActiveNation", activeNation?.name)
 
     }
 
@@ -119,12 +133,18 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     /*This function is called by the fragment when a country is selected.
     * It's implemented here because the fragments can't handle the navigation alone
     * during a two panel visualization. So it's centralized here in the main with this
-    * specific function, which bases its actions on the provenience of the call.*/
+    * specific function, which bases its actions on the provenience of the call.
+    * It's also called by the setDiscoverLayout functions to restore the state
+    * of the detail fragment.*/
     override fun onCountrySelected(country: Country?, provenience: Origin) {
         if(country == null) {
             Log.w("MainActivity", "Country selected is null")
             return
         }
+
+        //Update the state of the detail button
+        activeNation = country
+        Log.d("MainActivity", "Active nation updated: $activeNation")
 
         //Prepare the action in case of Map
         val mapAction = MapFragmentDirections.actionMapFragmentToDetailFragment(
@@ -162,7 +182,6 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.detailFragmentContainer, detailFragment)
                 .commit()
-            Log.d("DetailFragment", "Detail fragment replaced")
         }
 
         //If it's single panel, check provenience and navigate
@@ -184,20 +203,13 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         //Distinguish between the provenience of the call for creating the correct UI
         when (provenience) {
             State.TABLET -> {
-                setTabletMode(savedState)
+                setDiscoverLayout(R.layout.activity_main, activeFragment)
             }
             State.BOOK -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.listFragmentContainer, ListFragment())
-                    .replace(R.id.detailFragmentContainer, DetailFragment())
-                    .commit()
-
+                setDiscoverLayout(R.layout.book_layout, activeFragment)
             }
             State.TABLETOP -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.mapFragmentContainer, MapFragment())
-                    .replace(R.id.detailFragmentContainer, DetailFragment())
-                    .commit()
+                setDiscoverLayout(R.layout.tabletop_layout, activeFragment)
             }
         }
 
@@ -206,7 +218,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     /*This is a support function which is called by the onCreate function and
     * adds the welcome fragment to the correct container, based on the state
     * of the device at the moment of the call.*/
-    private fun setNewLayout(newLayout: Int) {
+    private fun setWelcomeLayout(newLayout: Int) {
 
         //Upload the correct fragment looking at the layout
         when (newLayout) {
@@ -248,9 +260,11 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
     /*This is a function called by the onCreate function and it has the role of putting
     * the correct fragment in the correct container, based on the state of the device.
-    * It's used when the activity is recreated after a configuration change, so it doesn't have to show
-    * a welcome fragment*/
-    private fun setOldLayout(newLayout: Int, savedInstanceState: Bundle?) {
+    * It's used when the activity is recreated after a configuration change, so it doesn't
+    * have to show a welcome fragment. It gets the state from the dedicated
+    * variable and restores the state of the detail fragment*/
+    private fun setDiscoverLayout(newLayout: Int, pastActiveFragment: Fragment?) {
+
         //Upload the correct fragment looking at the layout
         when (newLayout) {
 
@@ -259,8 +273,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
                 //It's separated between tablet mode or classical
                 if (isTablet) {
-                    setTabletMode(savedInstanceState)
+
+                    setTabletMode(pastActiveFragment)
                 } else {
+
                     setUpNavigation()
                 }
             }
@@ -271,6 +287,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                     .replace(R.id.mapFragmentContainer, MapFragment())
                     .replace(R.id.detailFragmentContainer, DetailFragment())
                     .commit()
+                Log.d("MainActivity", "Active nation in tabletop layout creation: $activeNation")
+                if(activeNation != null){
+                    onCountrySelected(activeNation, Origin.OTHER)
+                }
             }
 
             //Book mode, optimized for the list
@@ -279,6 +299,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                     .replace(R.id.listFragmentContainer, ListFragment())
                     .replace(R.id.detailFragmentContainer, DetailFragment())
                     .commit()
+                Log.d("MainActivity", "Active nation in book layout creation: $activeNation")
+                if(activeNation != null){
+                    onCountrySelected(activeNation, Origin.OTHER)
+                }
             }
         }
     }
@@ -323,7 +347,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     /*This function is called by the layout setter function to create the tablet layouts.
     * It distinguish alone the difference between the first creation or a recreation of the
     * activity and, based on that, it handles differently the fragments.*/
-    private fun setTabletMode(savedInstanceState: Bundle?) {
+    private fun setTabletMode(pastActiveFragment : Fragment?) {
         val fm = supportFragmentManager
         val trans = fm.beginTransaction()
 
@@ -334,7 +358,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
 
         //Two cases, first creation or recreation after a event
-        if(savedInstanceState == null) {
+        if(pastActiveFragment == null) {
+
             //Clean the container
             fm.findFragmentById(R.id.fragment_container_1)?.let {
                 trans.remove(it)
@@ -355,6 +380,11 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             trans.hide(mapFragment)
             trans.show(detailFragment)
 
+            //If there was a nation opened in the detail, open it again
+            if(activeNation != null) {
+                onCountrySelected(activeNation, Origin.OTHER)
+            }
+
             //Update the state
             activeFragment = listFragment
 
@@ -362,13 +392,12 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         else
         {
 
-            //Clean the container
             fm.findFragmentById(R.id.fragment_container_1)?.let {
                 trans.remove(it)
             }
 
-            //Get the past state
-            val activeFragmentName = savedInstanceState.getString("ActiveFragment") ?: "listFragment"
+            //Get the name of the fragments
+            val activeFragmentName = pastActiveFragment.tag
             val otherFragmentName = if (activeFragmentName == "mapFragment") "listFragment" else "mapFragment"
 
             //Create new instance of the fragments
@@ -390,6 +419,12 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             trans.show(activeFragment)
             trans.show(detailFragment)
 
+            //If there was a nation opened in the detail, open it again
+            if(activeNation != null) {
+                onCountrySelected(activeNation, Origin.OTHER)
+            }
+
+            //Update which is the active fragment
             this.activeFragment = activeFragment
 
         }

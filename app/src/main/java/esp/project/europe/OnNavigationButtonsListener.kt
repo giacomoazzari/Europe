@@ -1,7 +1,7 @@
 package esp.project.europe
 
 enum class Origin {
-    LIST, MAP
+    LIST, MAP, OTHER
 }
 
 enum class State {
