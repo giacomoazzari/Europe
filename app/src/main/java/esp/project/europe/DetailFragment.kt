@@ -46,6 +46,7 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("DetailFragment", "onViewCreated called")
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
         isTablet = resources.configuration.smallestScreenWidthDp >= 600
@@ -55,9 +56,13 @@ class DetailFragment : Fragment() {
 
         //----------- code for the arguments---------------------//
         //Check if there are args
+        Log.d("DetailFragment", "Deciding between placeholder or detail")
+        Log.d("DetailFragment", "arguments: $arguments")
+        Log.d("DetailFragment", "savedInstanceState: $savedInstanceState")
         if(arguments != null || savedInstanceState != null) {
 
             //Get the arguments and show them
+            Log.d("DetailFragment", "Getting arguments")
             getTheArguments(savedInstanceState)
             showCountryDetails()
         }
@@ -96,7 +101,7 @@ class DetailFragment : Fragment() {
 
 
         //----------- code for the hymn player---------------------//
-        //TODO: Restoring state of open display (open to open, open to book, open to close et viceversa)
+        //TODO: Restoring state of open display (open to open, open to book, open to close et vice-versa)
         //Require context
         val context = requireContext()
 

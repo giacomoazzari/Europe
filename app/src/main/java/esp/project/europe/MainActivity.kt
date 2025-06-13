@@ -162,6 +162,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.detailFragmentContainer, detailFragment)
                 .commit()
+            Log.d("DetailFragment", "Detail fragment replaced")
         }
 
         //If it's single panel, check provenience and navigate
