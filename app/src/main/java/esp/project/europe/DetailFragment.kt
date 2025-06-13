@@ -2,6 +2,7 @@ package esp.project.europe
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,7 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("DetailFragment", "onViewCreated called")
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
         isTablet = resources.configuration.smallestScreenWidthDp >= 600
@@ -54,9 +56,13 @@ class DetailFragment : Fragment() {
 
         //----------- code for the arguments---------------------//
         //Check if there are args
+        Log.d("DetailFragment", "Deciding between placeholder or detail")
+        Log.d("DetailFragment", "arguments: $arguments")
+        Log.d("DetailFragment", "savedInstanceState: $savedInstanceState")
         if(arguments != null || savedInstanceState != null) {
 
             //Get the arguments and show them
+            Log.d("DetailFragment", "Getting arguments")
             getTheArguments(savedInstanceState)
             showCountryDetails()
         }
@@ -95,7 +101,7 @@ class DetailFragment : Fragment() {
 
 
         //----------- code for the hymn player---------------------//
-        //TODO: Restoring state of open display (open to open, open to book, open to close et viceversa)
+        //TODO: Restoring state of open display (open to open, open to book, open to close et vice-versa)
         //Require context
         val context = requireContext()
 
@@ -174,6 +180,7 @@ class DetailFragment : Fragment() {
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        Log.d("DetailFragment", "onSaveInstanceState called")
         outState.putString("countryName", countryName)
         outState.putInt("flagResId", flagResId)
         outState.putString("capital", capital)
@@ -199,6 +206,7 @@ class DetailFragment : Fragment() {
             callingCode = savedInstanceState.getString("callingCode", "N/D")
             currency = savedInstanceState.getString("currency", "N/D")
             isPlaying = savedInstanceState.getBoolean("isPlaying", false)
+            Log.d("DetailFragment", "Getting arguments from saved Bundle $countryName")
 
         }else if (isDual || isTablet) {
             //Case 2: get data from the bundle
