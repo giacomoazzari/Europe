@@ -30,7 +30,6 @@ class CountryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
-        Log.d(mTAG, "New View Holder Created")
 
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_country, parent, false)

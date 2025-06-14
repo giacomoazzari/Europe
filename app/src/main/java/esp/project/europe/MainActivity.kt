@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                             setWelcomeLayout(newLayout)
                         }
                         else{
-                            setDiscoverLayout(newLayout, activeFragment)
+                            setDiscoverLayout(newLayout)
                         }
                     }
             }
@@ -137,6 +138,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     * It's also called by the setDiscoverLayout functions to restore the state
     * of the detail fragment.*/
     override fun onCountrySelected(country: Country?, provenience: Origin) {
+
+        //Checking for a correct nation
         if(country == null) {
             Log.w("MainActivity", "Country selected is null")
             return
@@ -144,7 +147,6 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
         //Update the state of the detail button
         activeNation = country
-        Log.d("MainActivity", "Active nation updated: $activeNation")
 
         //Prepare the action in case of Map
         val mapAction = MapFragmentDirections.actionMapFragmentToDetailFragment(
@@ -203,13 +205,13 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         //Distinguish between the provenience of the call for creating the correct UI
         when (provenience) {
             State.TABLET -> {
-                setDiscoverLayout(R.layout.activity_main, activeFragment)
+                setDiscoverLayout(R.layout.activity_main)
             }
             State.BOOK -> {
-                setDiscoverLayout(R.layout.book_layout, activeFragment)
+                setDiscoverLayout(R.layout.book_layout)
             }
             State.TABLETOP -> {
-                setDiscoverLayout(R.layout.tabletop_layout, activeFragment)
+                setDiscoverLayout(R.layout.tabletop_layout)
             }
         }
 
@@ -263,7 +265,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     * It's used when the activity is recreated after a configuration change, so it doesn't
     * have to show a welcome fragment. It gets the state from the dedicated
     * variable and restores the state of the detail fragment*/
-    private fun setDiscoverLayout(newLayout: Int, pastActiveFragment: Fragment?) {
+    private fun setDiscoverLayout(newLayout: Int) {
 
         //Upload the correct fragment looking at the layout
         when (newLayout) {
@@ -274,34 +276,52 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 //It's separated between tablet mode or classical
                 if (isTablet) {
 
-                    setTabletMode(pastActiveFragment)
+                    setTabletMode()
                 } else {
 
                     setUpNavigation()
                 }
             }
 
+
             //Tabletop mode, optimized for the map
             R.layout.tabletop_layout -> {
+
+                //First add the map
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.mapFragmentContainer, MapFragment())
-                    .replace(R.id.detailFragmentContainer, DetailFragment())
                     .commit()
-                Log.d("MainActivity", "Active nation in tabletop layout creation: $activeNation")
+
+                //Second, check the active nation and decide what to do
                 if(activeNation != null){
                     onCountrySelected(activeNation, Origin.OTHER)
                 }
+                else
+                {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.detailFragmentContainer, DetailFragment())
+                        .commit()
+                }
             }
+
 
             //Book mode, optimized for the list
             R.layout.book_layout -> {
+
+                //First add the list
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.listFragmentContainer, ListFragment())
-                    .replace(R.id.detailFragmentContainer, DetailFragment())
                     .commit()
-                Log.d("MainActivity", "Active nation in book layout creation: $activeNation")
+
+                //Second, check the active nation and decide what to do
                 if(activeNation != null){
                     onCountrySelected(activeNation, Origin.OTHER)
+                }
+                else
+                {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.detailFragmentContainer, DetailFragment())
+                        .commit()
                 }
             }
         }
@@ -347,86 +367,32 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     /*This function is called by the layout setter function to create the tablet layouts.
     * It distinguish alone the difference between the first creation or a recreation of the
     * activity and, based on that, it handles differently the fragments.*/
-    private fun setTabletMode(pastActiveFragment : Fragment?) {
+    private fun setTabletMode() {
+
         val fm = supportFragmentManager
         val trans = fm.beginTransaction()
 
-        //Define the variables for the fragments
-        val listFragment : Fragment
-        val mapFragment :Fragment
-        val detailFragment : Fragment
+        //Get the fragments from the tag
+        val listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()
+        val mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
+        val detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
 
 
-        //Two cases, first creation or recreation after a event
-        if(pastActiveFragment == null) {
-
-            //Clean the container
-            fm.findFragmentById(R.id.fragment_container_1)?.let {
-                trans.remove(it)
-            }
-
-            //Get the fragments from the tag
-            listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()
-            mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
-            detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
-
-            //First creation, add the fragments
-            trans.add(R.id.fragment_container_1, listFragment, "listFragment")
-            trans.add(R.id.fragment_container_1, mapFragment, "mapFragment")
-            trans.add(R.id.detailFragmentContainer, detailFragment, "detailFragment")
-
-            //Show correct ones, as default one is the list
-            trans.show(listFragment)
-            trans.hide(mapFragment)
-            trans.show(detailFragment)
-
-            //If there was a nation opened in the detail, open it again
-            if(activeNation != null) {
-                onCountrySelected(activeNation, Origin.OTHER)
-            }
-
-            //Update the state
-            activeFragment = listFragment
-
+        Log.d("MainActivity", "Setting active fragment to $activeFragment")
+        if(activeFragment != null) {
+            trans.replace(R.id.fragment_container_1, activeFragment!!, activeFragment!!.tag)
         }
-        else
-        {
+        else{
+            trans.replace(R.id.fragment_container_1, listFragment, "listFragment")
+            activeFragment = listFragment
+        }
 
-            fm.findFragmentById(R.id.fragment_container_1)?.let {
-                trans.remove(it)
-            }
 
-            //Get the name of the fragments
-            val activeFragmentName = pastActiveFragment.tag
-            val otherFragmentName = if (activeFragmentName == "mapFragment") "listFragment" else "mapFragment"
-
-            //Create new instance of the fragments
-            listFragment = ListFragment()
-            mapFragment = MapFragment()
-            detailFragment = DetailFragment()
-
-            //Find the active fragment from the state
-            val activeFragment = if (activeFragmentName == "mapFragment") mapFragment else listFragment
-            val otherFragment = if (activeFragmentName == "mapFragment") listFragment else mapFragment
-
-            // Replace both for having them in the fragment container
-            trans.add(R.id.fragment_container_1, activeFragment, activeFragmentName)
-            trans.add(R.id.fragment_container_1, otherFragment, otherFragmentName)
+        if(activeNation != null) {
+            onCountrySelected(activeNation, Origin.OTHER)
+        }
+        else{
             trans.replace(R.id.detailFragmentContainer, detailFragment, "detailFragment")
-
-            //Show and hide correct ones
-            trans.hide(otherFragment)
-            trans.show(activeFragment)
-            trans.show(detailFragment)
-
-            //If there was a nation opened in the detail, open it again
-            if(activeNation != null) {
-                onCountrySelected(activeNation, Origin.OTHER)
-            }
-
-            //Update which is the active fragment
-            this.activeFragment = activeFragment
-
         }
 
         //Conclude setup, allowing for optimization (as suggested in Android guidelines)
@@ -434,19 +400,27 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         trans.commit()
 
 
-        //Listener for the bottom navigation
+        //Get the stance of the bottom menù
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
         bottomNav.visibility = View.VISIBLE
+
+        //Set the bottom menù on the active fragment saved in the state
+        if(activeFragment != null) {
+            bottomNav.selectedItemId = if (activeFragment!!.tag == "listFragment")
+                R.id.listFragment else R.id.mapFragment
+        }
+
+        //Set the listener for the bottom menù
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
 
                 R.id.listFragment -> {
-                    switchFragment(listFragment)
+                    switchFragment(listFragment, "listFragment")
                     true
                 }
 
                 R.id.mapFragment -> {
-                    switchFragment(mapFragment)
+                    switchFragment(mapFragment, "mapFragment")
                     true
                 }
 
@@ -455,18 +429,18 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         }
     }
 
+
     /*This is a support function used by the tablet layout setter to change the fragments
     * when the user navigates with the bottom menu.*/
-    private fun switchFragment(fragmentToShow: Fragment) {
+    private fun switchFragment(fragmentToShow: Fragment, fragmentToShowTag : String) {
 
         //If already active, return
         if(fragmentToShow == activeFragment) return
 
         //Show the fragment to be shown
-        val trans = supportFragmentManager.beginTransaction()
-        activeFragment?.let { trans.hide(it) }
-        trans.show(fragmentToShow)
-        trans.commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_1, fragmentToShow, fragmentToShowTag)
+            .commit()
 
         //Update the state
         activeFragment = fragmentToShow
