@@ -45,8 +45,8 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("DetailFragment", "Detail fragment created")
 
-        Log.d("DetailFragment", "onViewCreated called")
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
         isTablet = resources.configuration.smallestScreenWidthDp >= 600
@@ -56,13 +56,9 @@ class DetailFragment : Fragment() {
 
         //----------- code for the arguments---------------------//
         //Check if there are args
-        Log.d("DetailFragment", "Deciding between placeholder or detail")
-        Log.d("DetailFragment", "arguments: $arguments")
-        Log.d("DetailFragment", "savedInstanceState: $savedInstanceState")
         if(arguments != null || savedInstanceState != null) {
 
             //Get the arguments and show them
-            Log.d("DetailFragment", "Getting arguments")
             getTheArguments(savedInstanceState)
             showCountryDetails()
         }
@@ -180,7 +176,6 @@ class DetailFragment : Fragment() {
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        Log.d("DetailFragment", "onSaveInstanceState called")
         outState.putString("countryName", countryName)
         outState.putInt("flagResId", flagResId)
         outState.putString("capital", capital)
