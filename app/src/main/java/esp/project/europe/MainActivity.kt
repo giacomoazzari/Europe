@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CountriesData.initCountries(this)
+        Coordinates.initCoordinates(this)
 
 
         //Get the state of the past activity
@@ -193,9 +194,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         //If it's single panel, check provenience and navigate
         else if(provenience == Origin.LIST) {
             nav.navigate(listAction)
-        }
-        else
-        {
+        } else {
             nav.navigate(mapAction)
         }
     }
@@ -396,8 +395,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_1, listFragment)
                     .commit()
-            }
-            else {
+            } else {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_1, mapFragment)
                     .commit()
@@ -417,13 +415,11 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         //the correct country.
         if(activeNation != null) {
             onCountrySelected(activeNation, Origin.OTHER)
-        }
-        else{
+        } else{
             supportFragmentManager.beginTransaction()
                 .replace(R.id.detailFragmentContainer, detailFragment)
                 .commit()
         }
-
 
 
         //Get the stance of the bottom menù
