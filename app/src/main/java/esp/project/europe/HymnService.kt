@@ -90,7 +90,19 @@ class HymnService : Service() {
 
         //Get the song name, make it into ad Identifier for the create method
         val songName = intent.getStringExtra(NATIONS_HYMN)
+        if (songName.isNullOrEmpty()) {
+            Log.e("HymnService", "Invalid or missing song name")
+            stopSelf()
+            return
+        }
+
         val songId = resources.getIdentifier(songName, "raw", packageName)
+        if (songId == 0) {
+            Log.e("HymnService", "Invalid song name: $songName")
+            stopSelf()
+            return
+        }
+
         Log.d("DEBUG", "Got to song name: $songId")
 
         //Add the song

@@ -157,7 +157,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 population = country.population,
                 area = country.area,
                 callingCode = country.callingCode,
-                currency = country.currency
+                currency = country.currency,
+                anthem = country.anthem
             )
 
         //Prepare the action in case of List
@@ -168,7 +169,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 population = country.population,
                 area = country.area,
                 callingCode = country.callingCode,
-                currency = country.currency
+                currency = country.currency,
+                anthem = country.anthem
             )
 
         //If it's dual panel, upload the fragment
@@ -180,7 +182,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                 country.population,
                 country.area,
                 country.callingCode,
-                country.currency
+                country.currency,
+                country.anthem
             )
             supportFragmentManager.beginTransaction()
                 .replace(R.id.detailFragmentContainer, detailFragment)

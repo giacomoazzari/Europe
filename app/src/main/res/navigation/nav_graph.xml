@@ -61,5 +61,8 @@
         <argument
             android:name="currency"
             app:argType="string" />
+        <argument
+            android:name="anthem"
+            app:argType="string" />
     </fragment>
 </navigation>

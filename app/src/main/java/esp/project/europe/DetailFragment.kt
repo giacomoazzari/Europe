@@ -24,6 +24,7 @@ class DetailFragment : Fragment() {
     private var area: Int = 0
     private var callingCode: String  = "N/D"
     private var currency: String  = "N/D"
+    private var anthem: String  = "N/D"
 
     //Variables for the hymn player
     private var isPlaying = false
@@ -115,10 +116,7 @@ class DetailFragment : Fragment() {
                 //Add the name of the country in order to find the song.
                 //countryName needs to be lowercase and spaces replaced
                 // with underscores to correspond with the raw files
-                i.putExtra(
-                    HymnService.NATIONS_HYMN, countryName
-                        .lowercase().replace(" ", "_")
-                )
+                i.putExtra(HymnService.NATIONS_HYMN, anthem)
 
                 //Start the foreground intent
                 ContextCompat.startForegroundService(context, i)
@@ -183,6 +181,7 @@ class DetailFragment : Fragment() {
         outState.putString("callingCode", callingCode)
         outState.putString("currency", currency)
         outState.putBoolean("isPlaying", isPlaying)
+        outState.putString("anthem", anthem)
     }
 
     //Private fun for getting the arguments
@@ -199,7 +198,7 @@ class DetailFragment : Fragment() {
             callingCode = savedInstanceState.getString("callingCode", "N/D")
             currency = savedInstanceState.getString("currency", "N/D")
             isPlaying = savedInstanceState.getBoolean("isPlaying", false)
-            Log.d("DetailFragment", "Getting arguments from saved Bundle $countryName")
+            anthem = savedInstanceState.getString("anthem", "N/D")
 
         }else if (isDual || isTablet) {
             //Case 2: get data from the bundle
@@ -211,6 +210,7 @@ class DetailFragment : Fragment() {
             area = args.getInt(ARG_AREA)
             callingCode = args.getString(ARG_CALLING_CODE,"")
             currency = args.getString(ARG_CURRENCY, "")
+            anthem = args.getString(ARG_ANTHEM, "")
 
         } else {
             //Case 3: get data from the arguments
@@ -222,6 +222,8 @@ class DetailFragment : Fragment() {
             area = args.area
             callingCode = args.callingCode
             currency = args.currency
+            anthem = args.anthem
+            Log.d("DetailFragment", "Getting arguments from saved Bundle $countryName, anthem: $anthem")
 
         }
 
@@ -290,6 +292,7 @@ class DetailFragment : Fragment() {
         const val ARG_AREA = "area"
         const val ARG_CALLING_CODE = "callingCode"
         const val ARG_CURRENCY = "currency"
+        const val ARG_ANTHEM = "anthem"
 
         fun newInstance(
             countryName: String,
@@ -298,7 +301,8 @@ class DetailFragment : Fragment() {
             population: Int,
             area: Int,
             callingCode: String,
-            currency: String
+            currency: String,
+            anthem: String
         ): DetailFragment {
             val fragment = DetailFragment()
             val args = Bundle().apply {
@@ -309,6 +313,7 @@ class DetailFragment : Fragment() {
                 putInt(ARG_AREA, area)
                 putString(ARG_CALLING_CODE, callingCode)
                 putString(ARG_CURRENCY, currency)
+                putString(ARG_ANTHEM, anthem)
             }
             fragment.arguments = args
             return fragment
