@@ -1,6 +1,7 @@
 package esp.project.europe
 
 import android.Manifest
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,18 +10,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
-import kotlinx.coroutines.launch
 import androidx.window.layout.WindowLayoutInfo
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
@@ -231,9 +231,18 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
                 //It's separated between tablet mode or classical
                 if (isTablet) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_1, WelcomeFragment())
-                        .commit()
+                    val orientation = resources.configuration.orientation
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        // In landscape
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.detailFragmentContainer, WelcomeFragment())
+                            .commit()
+                    } else {
+                        // In portrait
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_1, WelcomeFragment())
+                            .commit()
+                    }
 
                     //Hide the bottom menù in the welcome fragment
                     val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
@@ -382,8 +391,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         Log.d("MainActivity", "Setting active fragment to $activeFragment")
         if(activeFragment != null) {
             trans.replace(R.id.fragment_container_1, activeFragment!!, activeFragment!!.tag)
-        }
-        else{
+        }else{
             trans.replace(R.id.fragment_container_1, listFragment, "listFragment")
             activeFragment = listFragment
         }
