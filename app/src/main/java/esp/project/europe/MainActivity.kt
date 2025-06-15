@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CountriesData.initCountries(this)
 
 
         //Get the state of the past activity
