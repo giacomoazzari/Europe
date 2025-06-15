@@ -382,34 +382,48 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     * activity and, based on that, it handles differently the fragments.*/
     private fun setTabletMode() {
 
-        val fm = supportFragmentManager
-        val trans = fm.beginTransaction()
-
-        //Get the fragments from the tag
-        val listFragment = fm.findFragmentByTag("listFragment") as? ListFragment ?: ListFragment()
-        val mapFragment = fm.findFragmentByTag("mapFragment") as? MapFragment ?: MapFragment()
-        val detailFragment = fm.findFragmentByTag("detailFragment") as? DetailFragment ?: DetailFragment()
+        //Get new fragments
+        val listFragment = ListFragment()
+        val mapFragment = MapFragment()
+        val detailFragment = DetailFragment()
 
 
-        Log.d("MainActivity", "Setting active fragment to $activeFragment")
+        //Verify the conditions on the active fragment
         if(activeFragment != null) {
-            trans.replace(R.id.fragment_container_1, activeFragment!!, activeFragment!!.tag)
-        }else{
-            trans.replace(R.id.fragment_container_1, listFragment, "listFragment")
+
+            //Choose which one to upload
+            if(activeFragment == listFragment) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_1, listFragment)
+                    .commit()
+            }
+            else {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_1, mapFragment)
+                    .commit()
+            }
+        }
+        //In case of first creation add the list as default
+        else
+        {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_1, listFragment)
+                .commit()
             activeFragment = listFragment
         }
 
 
+        //Manage the detail fragment state with a call to the onCountrySelected function for opening
+        //the correct country.
         if(activeNation != null) {
             onCountrySelected(activeNation, Origin.OTHER)
         }
         else{
-            trans.replace(R.id.detailFragmentContainer, detailFragment, "detailFragment")
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.detailFragmentContainer, detailFragment)
+                .commit()
         }
 
-        //Conclude setup, allowing for optimization (as suggested in Android guidelines)
-        trans.setReorderingAllowed(true)
-        trans.commit()
 
 
         //Get the stance of the bottom menù
@@ -418,7 +432,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
         //Set the bottom menù on the active fragment saved in the state
         if(activeFragment != null) {
-            bottomNav.selectedItemId = if (activeFragment!!.tag == "listFragment")
+            bottomNav.selectedItemId = if (activeFragment == listFragment)
                 R.id.listFragment else R.id.mapFragment
         }
 
