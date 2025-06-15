@@ -47,7 +47,6 @@ class ListFragment : Fragment() {
             val savedState = savedInstanceState.getParcelable<Parcelable>("scroll_position")
             recyclerView.layoutManager?.onRestoreInstanceState(savedState)
         }
-        //TODO: Test saving scroll state with the open device
     }
 
     // Saving the state

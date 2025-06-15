@@ -97,7 +97,6 @@ class DetailFragment : Fragment() {
 
 
         //----------- code for the hymn player---------------------//
-        //TODO: Restoring state of open display (open to open, open to book, open to close et vice-versa)
         //Require context
         val context = requireContext()
 
@@ -184,7 +183,6 @@ class DetailFragment : Fragment() {
         outState.putString("callingCode", callingCode)
         outState.putString("currency", currency)
         outState.putBoolean("isPlaying", isPlaying)
-        // TODO: Save (and restore!) save of anthem playing (continue playing without interrupt): needs to be modified onPause
     }
 
     //Private fun for getting the arguments
