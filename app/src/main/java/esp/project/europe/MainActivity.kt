@@ -386,6 +386,15 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
         nav = navHostFragment.navController
 
+        //If it has already been initialized, show directly the active fragment, not the welcome
+        val navGraph = nav.navInflater.inflate(R.navigation.nav_graph)
+        if(hasBeenInitialized) {
+            val activeFragment = if (activeFragmentTag == "listFragment")
+                R.id.listFragment else R.id.mapFragment
+            navGraph.setStartDestination(activeFragment)
+            nav.graph = navGraph
+        }
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationMenu)
 
         NavigationUI.setupWithNavController(bottomNav, nav)
