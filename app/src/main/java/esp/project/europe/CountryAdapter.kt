@@ -1,6 +1,5 @@
 package esp.project.europe
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,6 @@ class CountryAdapter(
     private val countryList: List<Country>,
     private val listener: OnNavigationButtonsListener
     ) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
-
-        // TAG for logging
-        private val mTAG = this::class.simpleName
 
     inner class CountryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val flagImageView: ImageView = view.findViewById(R.id.flag_image)

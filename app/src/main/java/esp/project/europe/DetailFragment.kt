@@ -2,7 +2,6 @@ package esp.project.europe
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +44,6 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("DetailFragment", "Detail fragment created")
 
         //Check the state of the device
         isDual = (activity as? MainActivity)?.isDualPane == true
@@ -224,8 +222,6 @@ class DetailFragment : Fragment() {
             callingCode = args.callingCode
             currency = args.currency
             anthem = args.anthem
-            Log.d("DetailFragment", "Getting arguments from saved Bundle $countryName, anthem: $anthem")
-
         }
 
     }

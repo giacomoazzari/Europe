@@ -122,7 +122,7 @@ class MapFragment : Fragment(){
             val marker = Marker(map)
             val stateName = savedInstanceState.getString("selected_state")
 
-            //Check the esistance of the state and then open the marker
+            //Check the existence of the state and then open the marker
             if(stateName != null) {
                 val state = Coordinates.getCoordinatesByName(stateName)
                 marker.position = state!!.first
