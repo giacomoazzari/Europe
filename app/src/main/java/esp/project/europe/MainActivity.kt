@@ -1,7 +1,6 @@
 package esp.project.europe
 
 import android.Manifest
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -25,9 +24,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
     //Variables for tracking the state
-    private var activeFragment: Fragment? = null
+    private var activeFragmentTag: String? = null
     private var activeNation: Country? = null
     private var currentLayout : Int = 0
+    private var hasBeenInitialized : Boolean = false
 
     //Variable for the navigation
     private lateinit var nav: NavController
@@ -47,8 +47,9 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         val activeNationName = savedInstanceState?.getString("ActiveNation") ?: ""
         activeNation = CountriesData.getCountryByName(activeNationName)
 
-        val activeFragmentTag = savedInstanceState?.getString("ActiveFragment")
-        activeFragment = supportFragmentManager.findFragmentByTag(activeFragmentTag)
+        activeFragmentTag = savedInstanceState?.getString("ActiveFragment")
+
+        hasBeenInitialized = savedInstanceState?.getBoolean("hasBeenInitialized") ?: false
 
 
         //Check the permissions
@@ -107,11 +108,14 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
         //Only in tablet mode
         if(isTablet){
-            outState.putString("ActiveFragment", activeFragment?.tag)
+            outState.putString("ActiveFragment", activeFragmentTag)
         }
 
         //Save the state of the detail fragment
         outState.putString("ActiveNation", activeNation?.name)
+
+        //Save the initialization: it's needed not to show the welcome anymore
+        outState.putBoolean("hasBeenInitialized", hasBeenInitialized)
 
     }
 
@@ -205,6 +209,9 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     * handle the navigation in a two panel visualization.*/
     override fun onDiscoverButtonClick(provenience: State) {
 
+        //Set the variable
+        hasBeenInitialized = true
+
         //Distinguish between the provenience of the call for creating the correct UI
         when (provenience) {
             State.TABLET -> {
@@ -233,16 +240,17 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
                 //It's separated between tablet mode or classical
                 if (isTablet) {
-                    val orientation = resources.configuration.orientation
-                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        // In landscape
+
+                    //Put the welcome fragment
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_1, WelcomeFragment())
+                        .commit()
+
+                    //In case of an old detail opened, remove it
+                    val pastFragment = supportFragmentManager.findFragmentById(R.id.detailFragmentContainer)
+                    if(pastFragment != null) {
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.detailFragmentContainer, WelcomeFragment())
-                            .commit()
-                    } else {
-                        // In portrait
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container_1, WelcomeFragment())
+                            .remove(pastFragment)
                             .commit()
                     }
 
@@ -314,6 +322,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                         .replace(R.id.detailFragmentContainer, DetailFragment())
                         .commit()
                 }
+
+                activeFragmentTag = "mapFragment"
             }
 
 
@@ -335,6 +345,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                         .replace(R.id.detailFragmentContainer, DetailFragment())
                         .commit()
                 }
+
+                activeFragmentTag = "listFragment"
             }
         }
     }
@@ -388,10 +400,10 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
 
 
         //Verify the conditions on the active fragment
-        if(activeFragment != null) {
+        if(activeFragmentTag != null) {
 
             //Choose which one to upload
-            if(activeFragment == listFragment) {
+            if(activeFragmentTag == "listFragment") {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_1, listFragment)
                     .commit()
@@ -407,7 +419,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_1, listFragment)
                 .commit()
-            activeFragment = listFragment
+            activeFragmentTag = "listFragment"
         }
 
 
@@ -427,8 +439,8 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
         bottomNav.visibility = View.VISIBLE
 
         //Set the bottom menù on the active fragment saved in the state
-        if(activeFragment != null) {
-            bottomNav.selectedItemId = if (activeFragment == listFragment)
+        if(activeFragmentTag != null) {
+            bottomNav.selectedItemId = if (activeFragmentTag == "listFragment")
                 R.id.listFragment else R.id.mapFragment
         }
 
@@ -457,7 +469,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     private fun switchFragment(fragmentToShow: Fragment, fragmentToShowTag : String) {
 
         //If already active, return
-        if(fragmentToShow == activeFragment) return
+        if(fragmentToShowTag == activeFragmentTag) return
 
         //Show the fragment to be shown
         supportFragmentManager.beginTransaction()
@@ -465,7 +477,7 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
             .commit()
 
         //Update the state
-        activeFragment = fragmentToShow
+        activeFragmentTag = fragmentToShowTag
     }
 
     companion object
