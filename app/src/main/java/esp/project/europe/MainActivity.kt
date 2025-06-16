@@ -374,6 +374,13 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
                     .commit()
             }
 
+        //Stop the hymn is there was something playing
+        if(HymnService.isPlaying){
+            val i = Intent(this, HymnService::class.java)
+            i.putExtra(HymnService.ACTION_STOP, true)
+            ContextCompat.startForegroundService(this, i)
+        }
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
 

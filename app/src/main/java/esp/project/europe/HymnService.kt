@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat
 
 class HymnService : Service() {
 
-    private var isPlaying = false
     private var myPlayer : MediaPlayer? = null
 
     //No binding is needed
@@ -149,6 +148,7 @@ class HymnService : Service() {
         const val ACTION_PLAY = "play_hymn"
         const val ACTION_STOP = "stop_hymn"
         const val NATIONS_HYMN = "nations_hymn"
+        var isPlaying = false
     }
 
 }

@@ -39,7 +39,6 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
@@ -54,7 +53,7 @@ class DetailFragment : Fragment() {
 
         playButton = view.findViewById(R.id.playHymnButton)
 
-        isPlaying = savedInstanceState?.getBoolean("isPlaying") ?: false
+        isPlaying = HymnService.isPlaying
 
         if(isPlaying) {
             playButton.text = getString(R.string.stop)
@@ -184,7 +183,6 @@ class DetailFragment : Fragment() {
         outState.putString("currency", currency)
         outState.putBoolean("isPlaying", isPlaying)
         outState.putString("anthem", anthem)
-        outState.putBoolean("isPlaying", isPlaying)
     }
 
     //Private fun for getting the arguments
