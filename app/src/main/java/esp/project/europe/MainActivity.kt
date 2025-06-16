@@ -1,6 +1,7 @@
 package esp.project.europe
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -144,6 +145,12 @@ class MainActivity : AppCompatActivity(), OnNavigationButtonsListener {
     * It's also called by the setDiscoverLayout functions to restore the state
     * of the detail fragment.*/
     override fun onCountrySelected(country: Country?, provenience: Origin) {
+
+        if(activeNation != country) {
+            val i = Intent(this, HymnService::class.java)
+            i.putExtra(HymnService.ACTION_STOP, true)
+            ContextCompat.startForegroundService(this, i)
+        }
 
         //Checking for a correct nation
         if(country == null) {

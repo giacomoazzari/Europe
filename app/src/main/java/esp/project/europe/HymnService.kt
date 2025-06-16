@@ -30,6 +30,7 @@ class HymnService : Service() {
 
             //First: Start
             playHymn(intent)
+            Log.d("DEBUG", "Starting service")
         }
         else if (intent.getBooleanExtra(ACTION_STOP, false)) {
 

@@ -54,6 +54,13 @@ class DetailFragment : Fragment() {
 
         playButton = view.findViewById(R.id.playHymnButton)
 
+        isPlaying = savedInstanceState?.getBoolean("isPlaying") ?: false
+
+        if(isPlaying) {
+            playButton.text = getString(R.string.stop)
+        } else {
+            playButton.text = getString(R.string.play)
+        }
 
         //----------- code for the arguments---------------------//
         //Check if there are args
@@ -90,6 +97,22 @@ class DetailFragment : Fragment() {
 
             //Add the logic to the back button
             toolbar.setNavigationOnClickListener {
+                if (isPlaying) {
+
+                    //Create the intent
+                    val i = Intent(context, HymnService::class.java)
+
+                    //Add info for stopping
+                    i.putExtra(HymnService.ACTION_STOP, true)
+
+                    //Start the foreground service
+                    ContextCompat.startForegroundService(requireContext(), i)
+
+                    //Set the variable and button text
+                    isPlaying = false
+                    playButton.text = getString(R.string.play)
+
+                }
                 navController.navigateUp()
 
             }
@@ -147,28 +170,7 @@ class DetailFragment : Fragment() {
 
     }
 
-    //When the fragment detail goes on Pause, stop the hymn reproduction
-    override fun onPause() {
-        super.onPause()
 
-        //Only if the hymn is playing
-        if (isPlaying) {
-
-            //Create the intent
-            val i = Intent(context, HymnService::class.java)
-
-            //Add info for stopping
-            i.putExtra(HymnService.ACTION_STOP, true)
-
-            //Start the foreground service
-            ContextCompat.startForegroundService(requireContext(), i)
-
-            //Set the variable and button text
-            isPlaying = false
-            playButton.text = getString(R.string.play)
-
-        }
-    }
 
     // Saving the state
     override fun onSaveInstanceState(outState: Bundle) {
@@ -182,6 +184,7 @@ class DetailFragment : Fragment() {
         outState.putString("currency", currency)
         outState.putBoolean("isPlaying", isPlaying)
         outState.putString("anthem", anthem)
+        outState.putBoolean("isPlaying", isPlaying)
     }
 
     //Private fun for getting the arguments
