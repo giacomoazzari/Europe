@@ -160,21 +160,25 @@ class MapFragment : Fragment(){
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        // Save map position
-        val center = map.mapCenter as GeoPoint
-        outState.putDouble("map_latitude", center.latitude)
-        outState.putDouble("map_longitude", center.longitude)
+        if (::map.isInitialized) { // avoids the call if the map is not yet initialized
+            map.let{
+                // Save map position
+                val center = map.mapCenter as GeoPoint
+                outState.putDouble("map_latitude", center.latitude)
+                outState.putDouble("map_longitude", center.longitude)
 
-        // Save zoom
-        outState.putDouble("map_zoom", map.zoomLevelDouble)
+                // Save zoom
+                outState.putDouble("map_zoom", map.zoomLevelDouble)
 
-        // Save selected state, if any
-        val selectedMarker = map.overlays
-            .filterIsInstance<Marker>()
-            .firstOrNull { it.isInfoWindowOpen }
+                // Save selected state, if any
+                val selectedMarker = map.overlays
+                    .filterIsInstance<Marker>()
+                    .firstOrNull { it.isInfoWindowOpen }
 
-        selectedMarker?.let {
-            outState.putString("selected_state", it.title)
+                selectedMarker?.let {
+                    outState.putString("selected_state", it.title)
+                }
+            }
         }
     }
 
