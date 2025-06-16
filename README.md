@@ -10,7 +10,7 @@ Europe è un’app Android pensata per esplorare e conoscere i paesi europei. L�
 + <b>Mappa interattiva</b>: permette di esplorare l’Europa su mappa e selezionare i vari paesi con interazioni simili a quelle della lista.
 
 L’app è progettata per adattarsi dinamicamente ai dispositivi pieghevoli, quando questi espandono il proprio schermo in <b>modalità libro</b> (schermo piegato in orientazione verticale) e <b>modalità da tavolo</b>  (schermo piegato a 90° in orizzontale), sfruttando la libreria Jetpack WindowManager per modificare il layout in base alla postura. 
-In queste modalità, la navigazione e la presentazione dei contenuti vengono distribuite tra le due metà dello schermo per una fruizione più naturale.
+In queste modalità, la navigazione e la presentazione dei contenuti vengono distribuite tra le due metà dello schermo per una fruizione più naturale che fornisce all'utente la possibilità di visualizzare e interagire con più contenuti contemporaneamente.
 
 
 
@@ -35,6 +35,7 @@ In queste modalità, la navigazione e la presentazione dei contenuti vengono dis
   	+ La metà sinistra o inferiore gestisce il flusso principale di navigazione tramite NavHostFragment.
     + La metà destra o superiore si attiva solo alla selezione di un contenuto, mostrando il dettaglio in modo indipendente.
 + È stato implementato un Service per la riproduzione degli inni nazionali.
++ L'applicazione supporta due lingue, inglese (di default) e italiano, a seconda della lingua del dispositivo.
 + L’app è ovviamente compatibile con dispositivi tradizionali (smartphone, tablet) oltre che con dispositivi pieghevoli (es. Pixel Fold).
 
 ### Autori
